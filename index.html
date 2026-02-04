@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dino Hub - Pro</title>
+    <style>
+        :root { --primary: #2e7d32; --dark: #121212; --card: #1e1e1e; --accent: #fbc02d; --text: #e0e0e0; }
+        body { font-family: -apple-system, system-ui; background: var(--dark); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        header { background: var(--primary); width: 100%; padding: 15px 0; text-align: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .container { width: 90%; max-width: 450px; margin-top: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; text-align: center; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; }
+        .result { font-size: 1.8rem; color: var(--accent); margin: 20px 0; font-weight: bold; min-height: 40px; text-shadow: 0 0 10px rgba(251, 192, 45, 0.3); }
+        .hidden { display: none; }
+        .back-link { color: var(--accent); text-decoration: none; display: block; margin-bottom: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>DINO ROULETTE HUB</header>
+
+<div id="menu" class="container">
+    <h3>Select Game</h3>
+    <div id="game-list">
+        <button class="btn" onclick="openGame('Jurassic Park 3')">Jurassic Park III</button>
+    </div>
+    <hr style="border: 0.5px solid #333; margin: 20px 0;">
+    <button class="btn btn-outline" onclick="showView('add-game')">+ Add New Game/Category</button>
+</div>
+
+<div id="game-screen" class="container hidden">
+    <a href="#" class="back-link" onclick="showView('menu')">← Back to Menu</a>
+    <h2 id="current-game-title">Game Title</h2>
+    
+    <div class="card">
+        <label>Select Roulette:</label>
+        <select id="roulette-select"></select>
+        <div class="result" id="spin-result">READY</div>
+        <button class="btn" onclick="spin()">SPIN!</button>
+    </div>
+
+    <button class="btn btn-outline" onclick="showView('add-roulette')">+ Add New Roulette to this Game</button>
+</div>
+
+<div id="add-game" class="container hidden">
+    <h3>New Game</h3>
+    <input type="text" id="new-game-name" placeholder="Ex: Minecraft, JW2...">
+    <button class="btn" onclick="createNewGame()">Create Game</button>
+    <button class="btn btn-outline" onclick="showView('menu')">Cancel</button>
+</div>
+
+<div id="add-roulette" class="container hidden">
+    <h3>New Roulette</h3>
+    <input type="text" id="new-roulette-name" placeholder="Roulette Name (Ex: Items)">
+    <input type="text" id="new-roulette-options" placeholder="Options (comma separated: A, B, C)">
+    <button class="btn" onclick="createNewRoulette()">Add Roulette</button>
+    <button class="btn btn-outline" onclick="showView('game-screen')">Cancel</button>
+</div>
+
+<script>
+    // Initial Data
+    let games = JSON.parse(localStorage.getItem('dinoGames')) || {
+        "Jurassic Park 3": {
+            "Creatures": ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus", "Stegosaurus", "Triceratops"],
+            "Buff Type": ["Attack", "Defense", "Energy"],
+            "Chance": ["0%", "25%", "50%", "75%", "100%"]
+        }
+    };
+
+    let activeGame = "";
+
+    function showView(viewId) {
+        document.querySelectorAll('.container').forEach(v => v.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+        if(viewId === 'menu') renderGameList();
+    }
+
+    function renderGameList() {
+        const list = document.getElementById('game-list');
+        list.innerHTML = "";
+        Object.keys(games).forEach(game => {
+            const btn = document.createElement('button');
+            btn.className = "btn";
+            btn.innerText = game;
+            btn.onclick = () => openGame(game);
+            list.appendChild(btn);
+        });
+    }
+
+    function openGame(gameName) {
+        activeGame = gameName;
+        document.getElementById('current-game-title').innerText = gameName;
+        const select = document.getElementById('roulette-select');
+        select.innerHTML = "";
+        Object.keys(games[gameName]).forEach(r => {
+            select.innerHTML += `<option value="${r}">${r}</option>`;
+        });
+        showView('game-screen');
+    }
+
+    function spin() {
+        const rouletteName = document.getElementById('roulette-select').value;
+        const options = games[activeGame][rouletteName];
+        const resDiv = document.getElementById('spin-result');
+        
+        let count = 0;
+        const timer = setInterval(() => {
+            resDiv.innerText = options[Math.floor(Math.random() * options.length)];
+            count++;
+            if(count > 12) {
+                clearInterval(timer);
+                resDiv.innerText = "⭐ " + options[Math.floor(Math.random() * options.length)] + " ⭐";
+            }
+        }, 80);
+    }
+
+    function createNewGame() {
+        const name = document.getElementById('new-game-name').value;
+        if(name) {
+            games[name] = { "Default": ["Item 1", "Item 2"] };
+            save();
+            showView('menu');
+        }
+    }
+
+    function createNewRoulette() {
+        const name = document.getElementById('new-roulette-name').value;
+        const ops = document.getElementById('new-roulette-options').value.split(',').map(s => s.trim());
+        if(name && ops.length > 0) {
+            games[activeGame][name] = ops;
+            save();
+            openGame(activeGame);
+        }
+    }
+
+    function save() {
+        localStorage.setItem('dinoGames', JSON.stringify(games));
+    }
+
+    renderGameList();
+</script>
+</body>
+</html>
