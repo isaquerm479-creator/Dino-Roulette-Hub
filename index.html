@@ -8,21 +8,18 @@
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* TELA DE SELEÇÃO INICIAL */
+        /* TELA INICIAL */
         #game-selector { position: fixed; inset: 0; background: var(--d); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        
         .lang-top { position: absolute; top: 20px; display: flex; gap: 10px; }
         .btn-lang-init { background: var(--c); color: var(--a); border: 1px solid var(--p); padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
         .btn-lang-init.active { background: var(--p); color: white; }
-
         .game-card { background: var(--c); border: 2px solid var(--p); border-radius: 15px; padding: 25px; width: 100%; max-width: 350px; margin: 12px 0; cursor: pointer; transition: 0.3s; }
         .game-card:hover { border-color: var(--a); transform: scale(1.05); }
         .game-card h2 { margin: 0; color: var(--a); font-size: 1.4rem; }
         .game-card p { color: #888; margin: 5px 0 0 0; font-size: 0.9rem; }
-
         .credits { position: absolute; bottom: 15px; right: 20px; font-size: 0.8rem; color: #555; text-align: right; pointer-events: none; }
 
-        /* HEADER E SIDEBAR */
+        /* INTERFACE PRINCIPAL */
         header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
         .sidebar { position: fixed; left: -320px; top: 0; width: 280px; height: 100%; background: var(--c); z-index: 2000; transition: transform 0.4s; padding: 25px; border-right: 2px solid var(--p); display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box;}
         .sidebar.open { transform: translateX(320px); }
@@ -31,17 +28,16 @@
         select, input { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid var(--p); border-radius: 8px; outline: none; }
         .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; z-index:1500; backdrop-filter: blur(3px); }
 
-        /* INTERFACE PRINCIPAL */
         .main-content { padding: 20px; display: none; flex-direction: column; align-items: center; }
         .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
         #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
 
-        /* CARDS DINOS */
+        /* CARDS DINOS (SISTEMA DE CORES PADRONIZADO) */
         .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; transition: 0.5s ease; }
-        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.1); }
-        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.1); }
-        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.1); }
-        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.1); }
+        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
+        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.3); }
+        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.3); }
+        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.3); }
         
         .display-result { font-size: 1.3rem; color: var(--a); margin: 15px 0; font-weight: 900; text-align: center; text-transform: uppercase; min-height: 40px; }
         .val-stat { color: #fff; font-weight: bold; }
@@ -63,49 +59,19 @@
         <div class="btn-lang-init active" id="l-pt" onclick="changeLang('pt')">PT-BR</div>
         <div class="btn-lang-init" id="l-en" onclick="changeLang('en')">EN-US</div>
     </div>
-
     <h1 id="sel-title">ESCOLHA O JOGO</h1>
-    
-    <div class="game-card" onclick="initGame(1)">
-        <h2>Jurassic Park: OG</h2>
-        <p>Operation Genesis (2003)</p>
-    </div>
-    <div class="game-card" onclick="initGame(2)">
-        <h2>Jurassic World: E1</h2>
-        <p>Evolution 1 (2018)</p>
-    </div>
-    <div class="game-card" onclick="initGame(3)">
-        <h2>Jurassic World: E2</h2>
-        <p>Evolution 2 (2021)</p>
-    </div>
-
-    <div class="credits" id="txt-credits">
-        Esta roleta foi feita por Isaque, espero que goste.
-    </div>
+    <div class="game-card" onclick="initGame(1)"><h2>Jurassic Park: OG</h2><p>Operation Genesis (2003)</p></div>
+    <div class="game-card" onclick="initGame(2)"><h2>Jurassic World: E1</h2><p>Evolution 1 (2018)</p></div>
+    <div class="game-card" onclick="initGame(3)"><h2>Jurassic World: E2</h2><p>Evolution 2 / World 3 (Dominion)</p></div>
+    <div class="credits" id="txt-credits">Esta roleta foi feita por Isaque, espero que goste.</div>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
 <div class="sidebar" id="sidebar">
     <h3 id="txt-config-title">Configurações</h3>
-    <div class="side-item">
-        <label id="lbl-lang">Idioma</label>
-        <select id="lang-select" onchange="changeLang(this.value)">
-            <option value="pt">Português</option>
-            <option value="en">English</option>
-        </select>
-    </div>
-    <div class="side-item">
-        <label id="lbl-dlc">Conteúdo DLC</label>
-        <div class="toggle-container">
-            <input type="checkbox" id="dlc-toggle" onchange="updateDietSelect()">
-            <span id="txt-dlc-status" style="font-size:0.7rem">ATIVAR</span>
-        </div>
-    </div>
-    <div class="side-item">
-        <label id="lbl-game">Trocar Jogo</label>
-        <button class="btn btn-p" style="background:#444" onclick="location.reload()">Menu Principal</button>
-    </div>
+    <div class="side-item"><label id="lbl-lang">Idioma</label><select id="lang-select" onchange="changeLang(this.value)"><option value="pt">Português</option><option value="en">English</option></select></div>
+    <div class="side-item"><label id="lbl-dlc">Conteúdo DLC</label><div class="toggle-container"><input type="checkbox" id="dlc-toggle" onchange="updateDietSelect()"><span id="txt-dlc-status" style="font-size:0.7rem">ATIVAR</span></div></div>
+    <div class="side-item"><label id="lbl-game">Trocar Jogo</label><button class="btn btn-p" style="background:#444" onclick="location.reload()">Menu Principal</button></div>
     <button class="btn btn-p" onclick="toggleMenu()" id="btn-close-menu">Fechar</button>
 </div>
 
@@ -126,9 +92,40 @@
 
 <script>
     const GAME_DATA = {
-        1: { base: { car: ["Acrocanthosaurus", "Albertosaurus", "Allosaurus", "Carcharodontosaurus", "Ceratosaurus", "Dilophosaurus", "Spinosaurus", "T-Rex", "Velociraptor"], her: ["Ankylosaurus", "Brachiosaurus", "Camarasaurus", "Corythosaurus", "Dryosaurus", "Edmontosaurus", "Gallimimus", "Homalocephale", "Kentrosaurus", "Ouranosaurus", "Pachycephalosaurus", "Parasaurolophus", "Stegosaurus", "Styracosaurus", "Torosaurus", "Triceratops"], pis: [], oni: [] }, dlc: { car: [], her: [], pis: [], oni: [] } },
-        2: { base: { car: ["Allosaurus", "Baryonyx", "Carnotaurus", "Ceratosaurus", "Dilophosaurus", "Giganotosaurus", "Indominus Rex", "Majungasaurus", "Metriacanthosaurus", "Spinosaurus", "Suchomimus", "T-Rex", "Velociraptor"], her: ["Ankylosaurus", "Apatosaurus", "Brachiosaurus", "Camarasaurus", "Chasmosaurus", "Diplodocus", "Edmontosaurus", "Gallimimus", "Kentrosaurus", "Maiasaura", "Mamenchisaurus", "Pachycephalosaurus", "Parasaurolophus", "Stegosaurus", "Struthiomimus", "Triceratops"], pis: [], oni: [] }, dlc: { car: ["Acrocanthosaurus", "Albertosaurus", "Carcharodontosaurus", "Indoraptor", "Proceratosaurus", "Troodon"], her: ["Dreadnoughtus", "Dryosaurus", "Euoplocephalus", "Homalocephale", "Iguanodon", "Nigersaurus", "Ouranosaurus"], pis: ["Pteranodon"], oni: [] } },
-        3: { base: { car: ["Allosaurus", "Baryonyx", "Carnotaurus", "Ceratosaurus", "Coelophysis", "Compsognathus", "Cryolophosaurus", "Dilophosaurus", "Giganotosaurus", "Indominus Rex", "Indoraptor", "Mosasaurus", "T-Rex", "Velociraptor"], her: ["Amargasaurus", "Ankylosaurus", "Apatosaurus", "Brachiosaurus", "Diplodocus", "Dryosaurus", "Edmontosaurus", "Gallimimus", "Nasutoceratops", "Parasaurolophus", "Stegosaurus", "Triceratops"], pis: ["Dimorphodon", "Ichthyosaurus", "Pteranodon", "Tylosaurus"], oni: ["Archaeornithomimus"] }, dlc: { car: ["Atrociraptor", "Australovenator", "Dimetrodon", "Pyroraptor", "Scorpios Rex", "Yutyrannus"], her: ["Alamosaurus", "Minmi", "Therizinosaurus", "Wuerhosaurus"], pis: ["Archelon", "Kronosaurus", "Quetzalcoatlus"], oni: ["Deinocheirus", "Oviraptor"] } }
+        1: { // JOGO 1 - JPOG (PADRONIZADO)
+            base: { 
+                car: ["Acrocanthosaurus", "Albertosaurus", "Allosaurus", "Carcharodontosaurus", "Ceratosaurus", "Dilophosaurus", "Spinosaurus", "T-Rex", "Velociraptor"], 
+                her: ["Ankylosaurus", "Brachiosaurus", "Camarasaurus", "Corythosaurus", "Dryosaurus", "Edmontosaurus", "Gallimimus", "Homalocephale", "Kentrosaurus", "Ouranosaurus", "Pachycephalosaurus", "Parasaurolophus", "Stegosaurus", "Styracosaurus", "Torosaurus", "Triceratops"], 
+                pis: [], oni: [] 
+            },
+            dlc: { car: [], her: [], pis: [], oni: [] }
+        },
+        2: { // JOGO 2 - JWE1 (PADRONIZADO)
+            base: { 
+                car: ["Allosaurus", "Baryonyx", "Carnotaurus", "Ceratosaurus", "Deinonychus", "Dilophosaurus", "Giganotosaurus", "Indominus Rex", "Majungasaurus", "Metriacanthosaurus", "Spinosaurus", "Suchomimus", "T-Rex", "Velociraptor"], 
+                her: ["Ankylosaurus", "Apatosaurus", "Brachiosaurus", "Camarasaurus", "Chasmosaurus", "Diplodocus", "Edmontosaurus", "Gallimimus", "Kentrosaurus", "Maiasaura", "Mamenchisaurus", "Pachycephalosaurus", "Parasaurolophus", "Pentaceratops", "Sauropelta", "Sinoceratops", "Stegosaurus", "Struthiomimus", "Styracosaurus", "Torosaurus", "Triceratops"], 
+                pis: [], oni: [] 
+            },
+            dlc: { 
+                car: ["Acrocanthosaurus", "Albertosaurus", "Carcharodontosaurus", "Compsognathus", "Herrerasaurus", "Indoraptor", "Proceratosaurus", "Spinoraptor", "Troodon"], 
+                her: ["Dreadnoughtus", "Dryosaurus", "Euoplocephalus", "Homalocephale", "Iguanodon", "Nigersaurus", "Olorotitan", "Ouranosaurus"], 
+                pis: ["Pteranodon"], oni: [] 
+            }
+        },
+        3: { // JOGO 3 - JWE2 (PADRONIZADO)
+            base: { 
+                car: ["Allosaurus", "Baryonyx", "Carnotaurus", "Ceratosaurus", "Coelophysis", "Compsognathus", "Cryolophosaurus", "Dilophosaurus", "Giganotosaurus", "Indominus Rex", "Indoraptor", "Majungasaurus", "T-Rex", "Velociraptor"], 
+                her: ["Amargasaurus", "Ankylosaurus", "Apatosaurus", "Brachiosaurus", "Diplodocus", "Dryosaurus", "Edmontosaurus", "Gallimimus", "Nasutoceratops", "Parasaurolophus", "Stegosaurus", "Triceratops"], 
+                pis: ["Cearadactylus", "Dimorphodon", "Ichthyosaurus", "Mosasaurus", "Pteranodon", "Tylosaurus"], 
+                oni: ["Archaeornithomimus"] 
+            },
+            dlc: { 
+                car: ["Atrociraptor", "Australovenator", "Dimetrodon", "Pyroraptor", "Scorpios Rex", "Yutyrannus", "Tarbosaurus"], 
+                her: ["Alamosaurus", "Lystrosaurus", "Minmi", "Therizinosaurus", "Wuerhosaurus", "Microceratus"], 
+                pis: ["Archelon", "Kronosaurus", "Quetzalcoatlus", "Dunkleosteus"], 
+                oni: ["Deinocheirus", "Oviraptor"] 
+            }
+        }
     };
 
     const LANG_DATA = {
@@ -136,13 +133,10 @@
         en: { sel: "CHOOSE THE GAME", credits: "This roulette was made by Isaque, hope you enjoy it.", head: "DINO CENTRAL", config: "Settings", lang: "Language", dlc: "DLC Content", dlcOn: "ENABLE ALL", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN", wait: "WAITING...", atk: "ATK", def: "DEF", ene: "ENE", confirm: "Delete all?" }
     };
 
-    let activeGame = 1;
-    let currentLang = 'pt';
-    let cardCount = 0;
+    let activeGame = 1; let currentLang = 'pt'; let cardCount = 0;
 
     function changeLang(l) {
-        currentLang = l;
-        const d = LANG_DATA[l];
+        currentLang = l; const d = LANG_DATA[l];
         document.getElementById('sel-title').innerText = d.sel;
         document.getElementById('txt-credits').innerText = d.credits;
         document.getElementById('txt-head').innerText = d.head;
@@ -153,44 +147,18 @@
         document.getElementById('btn-del-all').innerText = d.del;
         document.getElementById('btn-spin-all').innerText = d.spinAll;
         document.getElementById('lang-select').value = l;
-        
         document.getElementById('l-pt').classList.toggle('active', l === 'pt');
         document.getElementById('l-en').classList.toggle('active', l === 'en');
         updateDietSelect();
     }
 
-    function initGame(gameId) {
-        activeGame = gameId;
-        document.getElementById('game-selector').style.display = 'none';
-        document.getElementById('app-main').style.display = 'flex';
-        addCard();
-    }
-
-    function toggleMenu() {
-        const s = document.getElementById('sidebar');
-        s.classList.toggle('open');
-        document.getElementById('overlay').style.display = s.classList.contains('open') ? 'block' : 'none';
-    }
-
-    function updateDietSelect() {
-        const status = document.getElementById('dlc-toggle').checked;
-        document.getElementById('txt-dlc-status').innerText = status ? LANG_DATA[currentLang].dlcOn : (currentLang === 'pt' ? 'DESATIVADO' : 'DISABLED');
-    }
+    function initGame(gameId) { activeGame = gameId; document.getElementById('game-selector').style.display = 'none'; document.getElementById('app-main').style.display = 'flex'; addCard(); }
+    function toggleMenu() { const s = document.getElementById('sidebar'); s.classList.toggle('open'); document.getElementById('overlay').style.display = s.classList.contains('open') ? 'block' : 'none'; }
+    function updateDietSelect() { const status = document.getElementById('dlc-toggle').checked; document.getElementById('txt-dlc-status').innerText = status ? LANG_DATA[currentLang].dlcOn : (currentLang === 'pt' ? 'DESATIVADO' : 'DISABLED'); }
 
     function addCard() {
-        const id = ++cardCount;
-        const d = LANG_DATA[currentLang];
-        const html = `
-            <div class="dino-card" id="card-${id}">
-                <button style="position:absolute; right:10px; top:10px; border:none; background:none; color:red; cursor:pointer;" onclick="this.parentElement.remove()">X</button>
-                <div class="display-result" id="res-${id}">${d.wait}</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; text-align:center; font-size:0.7rem; margin-bottom:10px;">
-                    <div>${d.atk}<br><span class="val-stat" id="atk-${id}">--</span></div>
-                    <div>${d.def}<br><span class="val-stat" id="def-${id}">--</span></div>
-                    <div>${d.ene}<br><span class="val-stat" id="ene-${id}">--</span></div>
-                </div>
-                <button class="btn btn-p" onclick="spinOne(${id})">${d.spin}</button>
-            </div>`;
+        const id = ++cardCount; const d = LANG_DATA[currentLang];
+        const html = `<div class="dino-card" id="card-${id}"><button style="position:absolute; right:10px; top:10px; border:none; background:none; color:red; cursor:pointer;" onclick="this.parentElement.remove()">X</button><div class="display-result" id="res-${id}">${d.wait}</div><div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; text-align:center; font-size:0.7rem; margin-bottom:10px;"><div>${d.atk}<br><span class="val-stat" id="atk-${id}">--</span></div><div>${d.def}<br><span class="val-stat" id="def-${id}">--</span></div><div>${d.ene}<br><span class="val-stat" id="ene-${id}">--</span></div></div><button class="btn btn-p" onclick="spinOne(${id})">${d.spin}</button></div>`;
         document.getElementById('wrapper-list').insertAdjacentHTML('beforeend', html);
     }
 
@@ -198,23 +166,20 @@
         const useDLC = document.getElementById('dlc-toggle').checked;
         const game = GAME_DATA[activeGame];
         let pool = [];
-        let categories = ['car', 'her', 'pis', 'oni'];
-        
-        categories.forEach(cat => {
+        ['car', 'her', 'pis', 'oni'].forEach(cat => {
             pool = pool.concat(game.base[cat].map(name => ({name, cat})));
             if(useDLC) pool = pool.concat(game.dlc[cat].map(name => ({name, cat})));
         });
-
+        if (pool.length === 0) return;
         const result = pool[Math.floor(Math.random() * pool.length)];
         const card = document.getElementById(`card-${id}`);
-        
         document.getElementById(`res-${id}`).innerText = "...";
         setTimeout(() => {
             document.getElementById(`res-${id}`).innerText = result.name;
+            // APLICAÇÃO DE COR PADRONIZADA PARA TODOS OS JOGOS
             card.className = `dino-card card-${result.cat}`;
-            
             ['atk', 'def', 'ene'].forEach(stat => {
-                const val = (Math.floor(Math.random() * 9) - 4) * 25; // -100 a 100
+                const val = (Math.floor(Math.random() * 9) - 4) * 25;
                 const el = document.getElementById(`${stat}-${id}`);
                 el.innerText = (val > 0 ? "+" : "") + val + "%";
                 el.className = "val-stat " + (val < 0 ? "val-neg" : (val > 0 ? "val-pos" : ""));
