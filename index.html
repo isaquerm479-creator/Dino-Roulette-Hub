@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dino Genera Ultra - Franchise Hub</title>
+    <title>Dino Genera Ultra - JWE2 (Jogo 3)</title>
     <style>
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
@@ -29,17 +29,25 @@
         .side-item label { display: block; margin-bottom: 8px; font-weight: bold; color: #888; font-size: 0.75rem; text-transform: uppercase; }
         select, input { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid var(--p); border-radius: 8px; outline: none; }
         .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; z-index:1500; backdrop-filter: blur(3px); }
+        
+        .guide-section { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
+        .guide-title { font-size: 0.7rem; color: var(--a); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .legend-item { display: flex; align-items: center; font-size: 0.75rem; margin-bottom: 4px; color: #bbb; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+        .epic-desc { font-size: 0.7rem; color: #888; line-height: 1.3; margin: 0; }
+
         .history-modal { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--d); z-index:3000; display:none; flex-direction: column; padding: 20px; box-sizing: border-box; }
         .history-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); padding-bottom: 10px; margin-bottom: 20px; }
         #history-content { overflow-y: auto; flex-grow: 1; }
         .hist-card { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid var(--a); }
         .main-content { padding: 20px; display: none; flex-direction: column; align-items: center; }
-        .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
-        .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; transition: 0.5s ease; margin-bottom: 20px; }
-        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
-        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.3); }
-        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.3); }
-        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.3); }
+        
+        .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; margin-bottom: 20px; }
+        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.2); }
+        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.2); }
+        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.2); }
+        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.2); }
+        
         .display-result { font-size: 1.4rem; color: var(--a); margin: 15px 0; font-weight: 900; text-align: center; text-transform: uppercase; min-height: 40px; }
         .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
         .box-stat { background: #000; padding: 10px 2px; border-radius: 10px; text-align: center; border-bottom: 2px solid var(--p); }
@@ -47,6 +55,7 @@
         .val-stat { color: #fff; font-weight: bold; font-size: 0.9rem; }
         .val-neg { color: #ff4444 !important; }
         .val-pos { color: #44ff44 !important; }
+        
         .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .btn-p { background: var(--p); color: white; padding: 12px; width: 100%; }
         .btn-a { background: var(--a); color: black; padding: 12px 15px; box-shadow: 0 4px 0 #b8860b; }
@@ -62,17 +71,17 @@
     
     <div class="hub-card" onclick="startApp(3)">
         <h2 id="hub-game3-title">Jurassic World Evolution 2</h2>
-        <p id="hub-game3-desc">Módulo: World 3 / Dominion</p>
+        <p id="hub-game3-desc">Módulo: World 3 / Dominion (Jogo 3)</p>
     </div>
 
     <a href="jogo2.html" class="hub-card">
         <h2 id="hub-game2-title">Jurassic World Evolution 1</h2>
-        <p id="hub-game2-desc">Módulo: World 2 / Classic JW</p>
+        <p id="hub-game2-desc">Módulo: World 2 / Classic JW (Jogo 2)</p>
     </a>
 
     <div class="hub-card" style="opacity:0.5; cursor: default;">
-        <h2 id="hub-soon-title">Em breve...</h2>
-        <p id="hub-soon-desc">JPOG & Dino Crisis Mode</p>
+        <h2 id="hub-soon-title">Jogo 1 - Em breve...</h2>
+        <p id="hub-soon-desc">JP Clássico & JPOG Mode</p>
     </div>
 
     <div class="hub-credits" id="hub-credits">Esta roleta foi feita por Isaque, espero que goste.</div>
@@ -109,12 +118,26 @@
     </div>
     <button class="btn btn-p" style="background:#444; margin-bottom:15px" onclick="toggleHistory()" id="btn-view-hist">Ver Histórico</button>
     <button class="btn btn-p" onclick="location.reload()" style="background:#b8860b; margin-bottom:15px" id="btn-change-game">Trocar de Jogo</button>
+
+    <div class="guide-section">
+        <span class="guide-title" id="tit-leg">Legenda de Cores</span>
+        <div class="legend-item"><div class="dot" style="background:#ff4444"></div> <span id="leg-car">Carnívoro</span></div>
+        <div class="legend-item"><div class="dot" style="background:#44ff44"></div> <span id="leg-her">Herbívoro</span></div>
+        <div class="legend-item"><div class="dot" style="background:#4444ff"></div> <span id="leg-pis">Piscívoro</span></div>
+        <div class="legend-item"><div class="dot" style="background:#ffaa44"></div> <span id="leg-oni">Onívoro</span></div>
+    </div>
+
+    <div class="guide-section">
+        <span class="guide-title" id="tit-epic">Sobre o Modo Épico</span>
+        <p class="epic-desc" id="desc-epic">Ative para garantir atributos positivos. Desative para incluir desafios negativos.</p>
+    </div>
+
     <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;" id="btn-close-menu">Fechar Menu</button>
 </div>
 
 <header id="app-header" style="display:none">
     <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <b id="txt-head">DINO GENERA</b>
+    <b id="txt-head">DINO GENERA: JWE2</b>
     <div style="width: 30px"></div>
 </header>
 
@@ -142,18 +165,20 @@
 
     const LANG_DATA = {
         pt: {
-            hubTitle: "DINO GENERA HUB", hubG3Desc: "Módulo: World 3 / Dominion", hubSoon: "Em breve...", hubCredits: "Feito por Isaque, espero que goste.",
+            hubTitle: "DINO GENERA HUB", hubG3Desc: "Módulo: World 3 / Dominion (Jogo 3)", hubSoon: "Jogo 1 - Em breve...", hubCredits: "Feito por Isaque, espero que goste.",
             head: "DINO GENERA: JWE2", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote",
             car: "Carnívoro", her: "Herbívoro", pis: "Piscívoro", oni: "Onívoro", btnBatch: "Gerar Agora", btnHist: "Ver Histórico",
             btnChange: "Trocar de Jogo", btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
-            atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...", confirm: "Apagar tudo?", histT: "HISTÓRICO COMPLETO"
+            atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...", confirm: "Apagar tudo?", histT: "HISTÓRICO COMPLETO",
+            titLeg: "Legenda de Cores", titEpic: "Sobre o Modo Épico", descEpic: "Ative para garantir atributos positivos. Desative para incluir desafios negativos."
         },
         en: {
-            hubTitle: "DINO GENERA HUB", hubG3Desc: "Module: World 3 / Dominion", hubSoon: "Coming soon...", hubCredits: "Created by Isaque, hope you like it.",
+            hubTitle: "DINO GENERA HUB", hubG3Desc: "Module: World 3 / Dominion (Game 3)", hubSoon: "Game 1 - Soon...", hubCredits: "Created by Isaque, hope you like it.",
             head: "DINO GENERA: JWE2", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate",
             car: "Carnivore", her: "Herbivore", pis: "Piscivore", oni: "Omnivore", btnBatch: "Generate Now", btnHist: "View History",
             btnChange: "Change Game", btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
-            atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...", confirm: "Delete all?", histT: "FULL HISTORY"
+            atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...", confirm: "Delete all?", histT: "FULL HISTORY",
+            titLeg: "Color Legend", titEpic: "About Epic Mode", descEpic: "Enable for positive attributes only. Disable for negative challenges."
         }
     };
 
@@ -168,12 +193,10 @@
     function changeLang(l) {
         currentLang = l;
         const d = LANG_DATA[l];
-        // Tradução Hub
         document.getElementById('hub-title').innerText = d.hubTitle;
         document.getElementById('hub-game3-desc').innerText = d.hubG3Desc;
         document.getElementById('hub-soon-title').innerText = d.hubSoon;
         document.getElementById('hub-credits').innerText = d.hubCredits;
-        // Tradução Sidebar/App
         document.getElementById('txt-head').innerText = d.head;
         document.getElementById('txt-config-title').innerText = d.config;
         document.getElementById('lbl-lang').innerText = d.lang;
@@ -189,8 +212,19 @@
         document.getElementById('btn-spin-all').innerText = d.spinAll;
         document.getElementById('hist-title').innerText = d.histT;
         document.getElementById('btn-close-hist').innerText = l === 'pt' ? "FECHAR" : "CLOSE";
+        document.getElementById('tit-leg').innerText = d.titLeg;
+        document.getElementById('leg-car').innerText = d.car;
+        document.getElementById('leg-her').innerText = d.her;
+        document.getElementById('leg-pis').innerText = d.pis;
+        document.getElementById('leg-oni').innerText = d.oni;
+        document.getElementById('tit-epic').innerText = d.titEpic;
+        document.getElementById('desc-epic').innerText = d.descEpic;
         
         updateDietSelect();
+        // Corrige os textos de espera nos cards
+        document.querySelectorAll('.display-result').forEach(res => {
+            if(res.innerText === "AGUARDANDO..." || res.innerText === "WAITING...") res.innerText = d.wait;
+        });
         document.querySelectorAll('.stat-label').forEach((label, index) => {
             const types = [d.atk, d.def, d.ene];
             label.innerText = types[index % 3];
