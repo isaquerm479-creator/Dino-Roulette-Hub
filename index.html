@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Spin Dinosaur - Genera</title>
+    <title>Spin Dinosaur - Genera Multi</title>
     <style>
         :root { --primary: #1b5e20; --dark: #0a0a0a; --card: #1a1a1a; --accent: #ffca28; --text: #f0f0f0; --danger: #c62828; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        header { background: var(--primary); width: 100%; padding: 10px 0; text-align: center; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-bottom: 2px solid var(--accent); }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
+        header { background: var(--primary); width: 100%; padding: 15px 0; text-align: center; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; }
         .lang-btn { background: #00000044; color: white; border: 1px solid white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; }
-        .container { width: 92%; max-width: 450px; margin-top: 15px; flex: 1; }
-        .card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; text-align: center; }
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
-        .btn-sm { padding: 8px 12px; font-size: 0.8rem; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 5px; cursor: pointer; }
-        .nav-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; width: 100%; }
-        .result { font-size: 1.7rem; color: var(--accent); margin: 10px 0; font-weight: bold; text-transform: uppercase; min-height: 40px; }
-        .hidden { display: none; }
-        .status-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #222; margin: 5px 0; border-radius: 8px; border-left: 4px solid var(--primary); }
-        .status-label { font-weight: bold; font-size: 0.9rem; color: #bbb; }
-        .status-value { color: var(--accent); font-size: 1.2rem; font-weight: 800; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; margin-top: 15px; width: 100%; }
-        footer { margin-top: 30px; padding: 20px; text-align: center; font-size: 0.85rem; color: #888; border-top: 1px solid #222; width: 100%; background: #0f0f0f; }
+        .container { width: 92%; max-width: 450px; margin-top: 15px; }
+        .card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px solid #333; text-align: center; position: relative; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.9rem; cursor: pointer; }
+        .btn-add { background: var(--accent); color: var(--dark); margin: 15px 0; padding: 15px; font-size: 1.1rem; }
+        .result { font-size: 1.5rem; color: var(--accent); margin: 10px 0; font-weight: bold; text-transform: uppercase; min-height: 35px; }
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 15px; }
+        .status-box { background: #222; padding: 8px 2px; border-radius: 8px; border-bottom: 3px solid var(--primary); }
+        .status-label { font-size: 0.65rem; color: #888; display: block; margin-bottom: 4px; }
+        .status-val { color: var(--accent); font-weight: bold; font-size: 0.9rem; }
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; position: absolute; top: -10px; right: 10px; }
+        footer { margin-top: auto; padding: 20px; text-align: center; font-size: 0.85rem; color: #888; width: 100%; background: #0f0f0f; }
     </style>
 </head>
 <body>
@@ -28,37 +28,13 @@
 <header>
     <div style="width: 60px"></div> 
     <span id="txt-title">SPIN DINOSAUR - GENERA</span>
-    <button class="lang-btn" onclick="toggleLang()" id="btn-lang">EN / PT</button>
+    <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
 </header>
 
 <div class="container">
-    <div class="nav-bar">
-        <button class="btn-sm" onclick="showAddModal()" id="txt-new-dino">+ Adicionar Dino</button>
-    </div>
-
-    <div class="card">
-        <h3 id="txt-creature">🦖 Criatura Sorteada</h3>
-        <div class="result" id="res-dino">...</div>
-        <button class="btn" onclick="spinDino()" id="txt-spin-dino">GIRAR DINOSSAURO</button>
-        <button class="btn-delete" id="btn-del-action" onclick="removeCurrentDino()" style="display:none;">Excluir este Dinossauro</button>
-    </div>
-
-    <div class="card">
-        <h3 id="txt-stats">⚡ Status de Combate</h3>
-        <div class="status-row"><span class="status-label" id="lbl-atk">⚔️ ATAQUE</span><span class="status-value" id="val-ataque">--%</span></div>
-        <div class="status-row"><span class="status-label" id="lbl-def">🛡️ DEFESA</span><span class="status-value" id="val-defesa">--%</span></div>
-        <div class="status-row"><span class="status-label" id="lbl-en">🔋 ENERGIA</span><span class="status-value" id="val-energia">--%</span></div>
-        <button class="btn" style="background: #558b2f;" onclick="spinAllBuffs()" id="txt-spin-buffs">GERAR STATUS</button>
-    </div>
-</div>
-
-<div id="modal-add" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-    <div style="background: #1a1a1a; padding: 25px; border: 2px solid var(--accent); border-radius: 15px; width: 85%; max-width: 350px;">
-        <h3 id="txt-add-title">Novo Dinossauro</h3>
-        <input type="text" id="new-dino-name" placeholder="Nome..." style="width:100%; padding:12px; margin:15px 0; border-radius:8px; border:none; background:#333; color:white;">
-        <button class="btn" onclick="addNewDino()" id="txt-create">Adicionar à Roleta</button>
-        <button class="btn-sm" style="width:100%; margin-top:10px; border:none; color:#888;" onclick="hideAddModal()">Cancelar</button>
-    </div>
+    <button class="btn btn-add" onclick="createNewDinoCard()" id="txt-add-btn">+ ADICIONAR NOVA CRIATURA</button>
+    <div id="dino-list">
+        </div>
 </div>
 
 <footer>
@@ -67,114 +43,107 @@
 </footer>
 
 <script>
-    const chancesDefault = ["0%", "25%", "50%", "75%", "100%"];
-    // Agora não usamos mais localStorage.getItem, a lista começa sempre limpa ou com o padrão.
-    let dinos = ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus"];
-    let currentDinoIndex = -1;
-    let isSpinning = false;
+    const dinosPool = ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus", "Stegosaurus", "Triceratops", "Ceratosaurus", "Baryonyx"];
+    const chances = ["0%", "25%", "50%", "75%", "100%"];
+    let cardCount = 0;
     let currentLang = 'pt';
 
     const translations = {
-        pt: { title: "SPIN DINOSAUR - GENERA", newDino: "+ Adicionar Dino", creature: "🦖 Criatura Sorteada", spinDino: "GIRAR DINOSSAURO", delete: "Excluir este Dinossauro", stats: "⚡ Status de Combate", atk: "⚔️ ATAQUE", def: "🛡️ DEFESA", en: "🔋 ENERGIA", spinBuffs: "GERAR STATUS", addTitle: "Novo Dinossauro", create: "Adicionar à Roleta" },
-        en: { title: "SPIN DINOSAUR - GENERA", newDino: "+ Add Dino", creature: "🦖 Selected Creature", spinDino: "SPIN DINOSAUR", delete: "Delete this Dinosaur", stats: "⚡ Combat Status", atk: "⚔️ ATTACK", def: "🛡️ DEFENSE", en: "🔋 ENERGY", spinBuffs: "GENERATE STATUS", addTitle: "New Dinosaur", create: "Add to Roulette" }
+        pt: { title: "SPIN DINOSAUR - GENERA", add: "+ ADICIONAR NOVA CRIATURA", creature: "CRIATURA", spin: "GIRAR TUDO", del: "REMOVER", atk: "ATK", def: "DEF", en: "ENER" },
+        en: { title: "SPIN DINOSAUR - GENERA", add: "+ ADD NEW CREATURE", creature: "CREATURE", spin: "SPIN ALL", del: "REMOVE", atk: "ATK", def: "DEF", en: "ENER" }
     };
 
-    function updateTexts() {
-        const t = translations[currentLang];
-        document.getElementById('txt-title').innerText = t.title;
-        document.getElementById('txt-new-dino').innerText = t.newDino;
-        document.getElementById('txt-creature').innerText = t.creature;
-        document.getElementById('txt-spin-dino').innerText = t.spinDino;
-        document.getElementById('btn-del-action').innerText = t.delete;
-        document.getElementById('txt-stats').innerText = t.stats;
-        document.getElementById('lbl-atk').innerText = t.atk;
-        document.getElementById('lbl-def').innerText = t.def;
-        document.getElementById('lbl-en').innerText = t.en;
-        document.getElementById('txt-spin-buffs').innerText = t.spinBuffs;
-        document.getElementById('txt-add-title').innerText = t.addTitle;
-        document.getElementById('txt-create').innerText = t.create;
+    function toggleLang() {
+        currentLang = currentLang === 'pt' ? 'en' : 'pt';
+        document.getElementById('txt-title').innerText = translations[currentLang].title;
+        document.getElementById('txt-add-btn').innerText = translations[currentLang].add;
+        // Atualiza botões existentes
+        document.querySelectorAll('.btn-spin-label').forEach(b => b.innerText = translations[currentLang].spin);
+        document.querySelectorAll('.btn-del-label').forEach(b => b.innerText = translations[currentLang].del);
     }
 
-    function toggleLang() { currentLang = currentLang === 'pt' ? 'en' : 'pt'; updateTexts(); }
+    function createNewDinoCard() {
+        cardCount++;
+        const list = document.getElementById('dino-list');
+        const cardId = `card-${cardCount}`;
+        
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.id = cardId;
+        
+        card.innerHTML = `
+            <button class="btn-delete btn-del-label" onclick="removeCard('${cardId}')">${translations[currentLang].del}</button>
+            <h3 style="margin:0; font-size:0.9rem; color:#666;">${translations[currentLang].creature} #${cardCount}</h3>
+            <div class="result" id="res-dino-${cardCount}">...</div>
+            
+            <div class="status-grid">
+                <div class="status-box">
+                    <span class="status-label">${translations[currentLang].atk}</span>
+                    <span class="status-val" id="res-atk-${cardCount}">--</span>
+                </div>
+                <div class="status-box">
+                    <span class="status-label">${translations[currentLang].def}</span>
+                    <span class="status-val" id="res-def-${cardCount}">--</span>
+                </div>
+                <div class="status-box">
+                    <span class="status-label">${translations[currentLang].en}</span>
+                    <span class="status-val" id="res-ener-${cardCount}">--</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-spin-label" onclick="spinFullCard(${cardCount})">${translations[currentLang].spin}</button>
+        `;
+        
+        list.prepend(card); // Adiciona no topo
+    }
 
-    function spinDino() {
-        if(dinos.length === 0 || isSpinning) return;
-        isSpinning = true;
-        document.getElementById('btn-del-action').style.display = 'none';
-        const res = document.getElementById('res-dino');
+    function removeCard(id) {
+        document.getElementById(id).remove();
+    }
+
+    function spinFullCard(id) {
+        // Girar Dino
+        const resDino = document.getElementById(`res-dino-${id}`);
         let c = 0;
-        let total = 15 + Math.floor(Math.random()*10);
-        const run = () => {
-            let idx = Math.floor(Math.random()*dinos.length);
-            res.innerText = dinos[idx];
-            if(c++ < total) { setTimeout(run, 60 + (c*5)); }
-            else { 
-                res.innerHTML = "⭐ " + dinos[idx] + " ⭐"; 
-                currentDinoIndex = idx; 
-                isSpinning = false;
-                document.getElementById('btn-del-action').style.display = 'block';
+        const tDino = setInterval(() => {
+            resDino.innerText = dinosPool[Math.floor(Math.random()*dinosPool.length)];
+            if(c++ > 10) { 
+                clearInterval(tDino); 
+                resDino.innerText = "⭐ " + resDino.innerText + " ⭐";
             }
-        };
-        run();
-    }
+        }, 60);
 
-    function getWeightedChance(hasAlready, valueToWeight) {
-        if (hasAlready) {
-            return Math.random() < 0.05 ? valueToWeight : chancesDefault.filter(v => v !== valueToWeight)[Math.floor(Math.random() * 4)];
-        }
-        return chancesDefault[Math.floor(Math.random() * chancesDefault.length)];
-    }
-
-    function spinAllBuffs() {
-        const ids = ['val-ataque', 'val-defesa', 'val-energia'];
-        let results = [];
+        // Girar Status (Com a regra de raridade de 5%)
+        const statsIds = [`res-atk-${id}`, `res-def-${id}`, `res-ener-${id}`];
         let has100 = false;
         let has0 = false;
 
-        ids.forEach(() => {
-            let val = getWeightedChance(has100, "100%");
-            if(val === "100%") has100 = true;
-            if(val === "0%") {
-                if(has0 && Math.random() > 0.05) { 
-                    val = chancesDefault.filter(v => v !== "0%")[Math.floor(Math.random() * 4)];
-                } else {
-                    has0 = true;
-                }
+        statsIds.forEach((sid) => {
+            let finalVal = chances[Math.floor(Math.random()*5)];
+            
+            // Regra de equilíbrio
+            if(finalVal === "100%") {
+                if(has100 && Math.random() > 0.05) finalVal = "75%";
+                else has100 = true;
             }
-            results.push(val);
+            if(finalVal === "0%") {
+                if(has0 && Math.random() > 0.05) finalVal = "25%";
+                else has0 = true;
+            }
+
+            let sc = 0;
+            const tStat = setInterval(() => {
+                document.getElementById(sid).innerText = chances[Math.floor(Math.random()*5)];
+                if(sc++ > 8) {
+                    clearInterval(tStat);
+                    document.getElementById(sid).innerText = finalVal;
+                }
+            }, 80);
         });
-
-        ids.forEach((id, i) => {
-            let c = 0;
-            const t = setInterval(() => {
-                document.getElementById(id).innerText = chancesDefault[Math.floor(Math.random()*5)];
-                if(c++ > 10 + (i*2)) { clearInterval(t); document.getElementById(id).innerText = results[i]; }
-            }, 70);
-        });
     }
 
-    function showAddModal() { document.getElementById('modal-add').classList.remove('hidden'); }
-    function hideAddModal() { document.getElementById('modal-add').classList.add('hidden'); }
-    
-    function addNewDino() { 
-        const n = document.getElementById('new-dino-name').value; 
-        if(n){ 
-            dinos.push(n); 
-            document.getElementById('new-dino-name').value = "";
-            hideAddModal(); 
-        } 
-    }
-    
-    function removeCurrentDino() { 
-        if(currentDinoIndex > -1){ 
-            dinos.splice(currentDinoIndex, 1); 
-            document.getElementById('res-dino').innerText = "..."; 
-            document.getElementById('btn-del-action').style.display = 'none';
-            currentDinoIndex = -1; 
-        } 
-    }
-
-    updateTexts();
+    // Cria a primeira roleta automaticamente ao abrir
+    window.onload = createNewDinoCard;
 </script>
 </body>
 </html>
