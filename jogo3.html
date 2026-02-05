@@ -48,10 +48,9 @@
 
         .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        /* BOTÕES DE CONTROLE SUPERIOR */
         .controls-box { 
             background: #111; padding: 15px; border-radius: 15px; 
-            margin-bottom: 25px; border: 1px solid #222; width: 90%; max-width: 600px;
+            margin-bottom: 25px; border: 1px solid #222; width: 95%; max-width: 500px;
         }
         .top-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
@@ -61,10 +60,10 @@
             transition: 0.4s; margin-bottom: 20px; 
         }
         
-        .card-car { border-color: #ff4444 !important; }
-        .card-her { border-color: #44ff44 !important; }
-        .card-pis { border-color: #4444ff !important; }
-        .card-oni { border-color: #ffaa44 !important; }
+        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
+        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 10px rgba(68, 255, 68, 0.2); }
+        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 10px rgba(68, 68, 255, 0.2); }
+        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 10px rgba(255, 170, 68, 0.2); }
 
         .display-result { 
             font-size: 1.2rem; color: var(--a); margin: 15px 0; 
@@ -72,7 +71,7 @@
         }
         
         .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .box-stat { background: #000; padding: 10px 2px; border-radius: 10px; text-align: center; }
+        .box-stat { background: #000; padding: 10px 2px; border-radius: 10px; text-align: center; border-bottom: 1px solid #333; }
         .stat-label { font-size: 0.6rem; color: #555; display: block; }
         .val-stat { color: #fff; font-weight: bold; font-size: 0.9rem; }
         .val-neg { color: #ff4444 !important; }
@@ -80,16 +79,16 @@
 
         .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-p { background: var(--p); color: white; padding: 12px; width: 100%; }
-        .btn-a { background: var(--a); color: black; padding: 10px; font-size: 0.8rem; }
+        .btn-a { background: var(--a); color: black; padding: 12px; width: 100%; margin-top: 5px; }
         .btn-clear { background: var(--r); color: white; }
-        .btn-spin-all { background: #1565c0; color: white; grid-column: span 2; padding: 12px; }
+        .btn-spin-all { background: #1565c0; color: white; grid-column: span 2; padding: 15px; font-size: 1rem; }
         .btn-r { background: #333; color: var(--r); padding: 5px 10px; position: absolute; top: 12px; right: 12px; }
         
         #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
         
-        .side-item { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: #888; }
-        select, input { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
+        .side-item { margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: var(--a); font-weight: bold; text-transform: uppercase; }
+        select, input { width: 100%; padding: 12px; background: #000; color: white; border: 1px solid var(--p); border-radius: 8px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -103,49 +102,52 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="sidebar" id="sidebar">
-    <h3 id="txt-config-title">Configurações</h3>
+    <h3 style="color:var(--a); margin-top:0;">PAINEL DE CRIAÇÃO</h3>
     
     <div class="side-item">
-        <label id="lbl-lang">Idioma</label>
+        <label>Quantidade e Dieta</label>
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <input type="number" id="add-qty" value="1" min="1" max="50" style="width:70px;">
+            <select id="diet-filter" style="flex:1;">
+                <option value="all">Aleatório</option>
+                <option value="car">Carnívoros</option>
+                <option value="her">Herbívoros</option>
+                <option value="pis">Piscívoros</option>
+                <option value="oni">Onívoros</option>
+            </select>
+        </div>
+        <button class="btn btn-a" onclick="multiAdd()">+ GERAR NO(S) CARD(S)</button>
+    </div>
+
+    <div class="side-item">
+        <label>Configurações</label>
+        <select id="epic-mode" style="margin-bottom:10px;">
+            <option value="off">Modo Normal</option>
+            <option value="on">Modo Épico (Sorte 🍀)</option>
+        </select>
         <select id="lang-select" onchange="changeLang(this.value)">
             <option value="pt">Português</option>
             <option value="en">English</option>
         </select>
     </div>
 
-    <div class="side-item">
-        <label id="lbl-diet">Filtrar Dieta (Para novos cards)</label>
-        <select id="diet-filter">
-            <option value="all">Todas (Aleatório)</option>
-            <option value="car">Carnívoros</option>
-            <option value="her">Herbívoros</option>
-            <option value="pis">Piscívoros</option>
-            <option value="oni">Onívoros</option>
-        </select>
+    <div class="guide-section">
+        <span class="guide-title">Significado das Cores</span>
+        <div class="legend-item"><div class="dot" style="background:#ff4444"></div> <span>Carnívoro (Vermelho)</span></div>
+        <div class="legend-item"><div class="dot" style="background:#44ff44"></div> <span>Herbívoro (Verde)</span></div>
+        <div class="legend-item"><div class="dot" style="background:#4444ff"></div> <span>Piscívoro (Azul)</span></div>
+        <div class="legend-item"><div class="dot" style="background:#ffaa44"></div> <span>Onívoro (Laranja)</span></div>
     </div>
 
-    <div class="side-item">
-        <label id="lbl-epic">Modo Épico</label>
-        <select id="epic-mode">
-            <option value="off">OFF (Normal)</option>
-            <option value="on">ON (Apenas Bônus 🍀)</option>
-        </select>
-    </div>
-
-    <button class="btn btn-p" onclick="location.href='index.html'" id="btn-back-hub" style="background:#b8860b; margin-bottom:10px;">Voltar ao Hub</button>
-    <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;">Fechar</button>
+    <button class="btn btn-p" onclick="location.href='index.html'" style="background:#b8860b; margin-bottom:10px;">Sair para o Hub</button>
+    <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;">Fechar Menu</button>
 </div>
 
 <div class="main-content">
     <div class="controls-box">
-        <div style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
-            <label style="margin:0; white-space:nowrap;">Qtd:</label>
-            <input type="number" id="add-qty" value="1" min="1" max="20" style="width:60px;">
-            <button class="btn btn-a" onclick="multiAdd()" id="btn-add" style="flex:1;">+ ADICIONAR</button>
-        </div>
         <div class="top-btns">
-            <button class="btn btn-spin-all" onclick="spinAll()" id="btn-spin-all">GIRAR TODOS</button>
-            <button class="btn btn-clear" onclick="clearAll()" id="btn-del-all">APAGAR TUDO</button>
+            <button class="btn btn-spin-all" onclick="spinAll()" id="btn-spin-all">GIRAR TODAS AS ROLETAS</button>
+            <button class="btn btn-clear" onclick="clearAll()" id="btn-del-all">LIMPAR TELA</button>
         </div>
     </div>
     
@@ -154,10 +156,10 @@
 
 <script>
     const DINOS = {
-        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus"],
-        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus"],
-        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus"],
-        oni: ["Gallimimus", "Oviraptor", "Deinocheirus"]
+        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus", "Majungasaurus", "Allosaurus", "Spinosaurus"],
+        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Parasaurolophus", "Iguanodon"],
+        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus", "Dimorphodon"],
+        oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Struthiomimus"]
     };
 
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
@@ -166,64 +168,53 @@
     let currentLang = 'pt';
     let cardCount = 0;
 
-    const LANG_DATA = {
-        pt: {
-            head: "DINO GENERA: JURASSIC WORLD 3", spinAll: "GIRAR TODOS", add: "+ ADICIONAR", del: "APAGAR TUDO",
-            wait: "AGUARDANDO...", spin: "GIRAR", atk: "ATK", def: "DEF", ene: "ENE"
-        },
-        en: {
-            head: "DINO GENERA: JW3", spinAll: "SPIN ALL", add: "+ ADD DINO", del: "CLEAR ALL",
-            wait: "WAITING...", spin: "SPIN", atk: "ATK", def: "DEF", ene: "ENE"
-        }
-    };
-
-    function toggleMenu() {
-        document.getElementById('sidebar').classList.toggle('open');
-        document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
-    }
-
     function multiAdd() {
-        const qty = document.getElementById('add-qty').value;
-        for(let i=0; i<qty; i++) addCard();
+        const qty = parseInt(document.getElementById('add-qty').value) || 1;
+        const diet = document.getElementById('diet-filter').value;
+        for(let i=0; i<qty; i++) {
+            addCard(diet);
+        }
+        toggleMenu(); // Fecha o menu para ver os cards
     }
 
-    function addCard() {
+    function addCard(forcedDiet = 'all') {
         cardCount++;
-        const d = LANG_DATA[currentLang];
-        const diet = document.getElementById('diet-filter').value;
+        const d = (currentLang === 'pt') ? "AGUARDANDO..." : "WAITING...";
+        const spinTxt = (currentLang === 'pt') ? "GIRAR" : "SPIN";
+        
         const html = `
-            <div class="dino-card" id="card-${cardCount}" data-diet="${diet}">
+            <div class="dino-card" id="card-${cardCount}" data-diet="${forcedDiet}">
                 <button class="btn btn-r" onclick="document.getElementById('card-${cardCount}').remove()">X</button>
-                <div class="display-result" id="res-${cardCount}">${d.wait}</div>
+                <div class="display-result" id="res-${cardCount}">${d}</div>
                 <div class="grid-stats">
-                    <div class="box-stat"><span class="stat-label">${d.atk}</span><span class="val-stat" id="atk-${cardCount}">--</span></div>
-                    <div class="box-stat"><span class="stat-label">${d.def}</span><span class="val-stat" id="def-${cardCount}">--</span></div>
-                    <div class="box-stat"><span class="stat-label">${d.ene}</span><span class="val-stat" id="ene-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">ATK</span><span class="val-stat" id="atk-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">DEF</span><span class="val-stat" id="def-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">ENE</span><span class="val-stat" id="ene-${cardCount}">--</span></div>
                 </div>
-                <button class="btn btn-p btn-spin-manual" onclick="spin(${cardCount})">${d.spin}</button>
+                <button class="btn btn-p" onclick="spin(${cardCount})">${spinTxt}</button>
             </div>`;
         document.getElementById('wrapper-list').insertAdjacentHTML('beforeend', html);
     }
 
     function spin(id) {
         const cardEl = document.getElementById(`card-${id}`);
-        const dietFilter = cardEl.getAttribute('data-diet');
+        const dietType = cardEl.getAttribute('data-diet');
         const isEpic = document.getElementById('epic-mode').value === 'on';
         
         let pool = [];
-        if(dietFilter === 'all') {
+        if(dietType === 'all') {
             pool = [].concat(...Object.values(DINOS));
         } else {
-            pool = DINOS[dietFilter];
+            pool = DINOS[dietType];
         }
 
         const chosen = pool[Math.floor(Math.random() * pool.length)];
         
-        // Descobrir o tipo para a cor
-        let type = 'car';
-        for(let t in DINOS) if(DINOS[t].includes(chosen)) type = t;
+        // Determinar cor baseada na dieta real do dino sorteado
+        let realType = 'car';
+        for(let t in DINOS) if(DINOS[t].includes(chosen)) realType = t;
 
-        cardEl.className = `dino-card card-${type}`;
+        cardEl.className = `dino-card card-${realType}`;
         document.getElementById(`res-${id}`).innerText = "⭐ " + chosen;
 
         const chances = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
@@ -236,24 +227,28 @@
     }
 
     function spinAll() {
-        const cards = document.querySelectorAll('.dino-card');
-        cards.forEach(card => {
-            const id = card.id.split('-')[1];
-            spin(id);
+        document.querySelectorAll('.dino-card').forEach(card => {
+            spin(card.id.split('-')[1]);
         });
     }
 
     function clearAll() { document.getElementById('wrapper-list').innerHTML = ""; }
     
-    function changeLang(l) {
-        currentLang = l;
-        const d = LANG_DATA[l];
-        document.getElementById('txt-head').innerText = d.head;
-        document.getElementById('btn-spin-all').innerText = d.spinAll;
-        document.getElementById('btn-add').innerText = d.add;
-        document.getElementById('btn-del-all').innerText = d.del;
+    function toggleMenu() {
+        const s = document.getElementById('sidebar');
+        const o = document.getElementById('overlay');
+        s.classList.toggle('open');
+        o.style.display = s.classList.contains('open') ? 'block' : 'none';
     }
 
+    function changeLang(l) {
+        currentLang = l;
+        document.getElementById('txt-head').innerText = (l === 'pt') ? "DINO GENERA: JURASSIC WORLD 3" : "DINO GENERA: JW3";
+        document.getElementById('btn-spin-all').innerText = (l === 'pt') ? "GIRAR TODAS AS ROLETAS" : "SPIN ALL WHEELS";
+        document.getElementById('btn-del-all').innerText = (l === 'pt') ? "LIMPAR TELA" : "CLEAR SCREEN";
+    }
+
+    // Inicia com um card
     addCard();
 </script>
 </body>
