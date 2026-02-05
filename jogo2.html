@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dino Genera Ultra - JW1</title>
     <style>
-        /* MANTENDO SEU CSS DE OURO INTEGRALMENTE */
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
         header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
@@ -60,35 +59,27 @@
 </div>
 
 <div class="sidebar" id="sidebar">
-    <h3 id="txt-config-title" style="color:var(--a); margin-top:0;">Configurações</h3>
-    
+    <h3 id="txt-config-title">Configurações</h3>
     <div class="side-item">
         <label id="lbl-lang">Idioma</label>
         <select onchange="changeLang(this.value)"><option value="pt">Português</option><option value="en">English</option></select>
     </div>
-
     <div class="side-item">
         <label id="lbl-epic">Modo Épico</label>
         <select id="epic-mode"><option value="off">OFF</option><option value="on">ON (🍀)</option></select>
     </div>
-
     <div class="side-item">
         <label id="lbl-diet">Dieta Padrão</label>
         <select id="diet-select"></select>
     </div>
-
     <div class="side-item">
         <label id="lbl-batch">Gerar em Lote</label>
         <input type="number" id="batch-qty" value="1" min="1" max="100">
         <button class="btn btn-p" style="margin-top:10px" id="btn-batch" onclick="batchAdd()">Gerar Agora</button>
     </div>
-
     <button class="btn btn-p" style="background:#444; margin-bottom:15px" id="btn-view-hist" onclick="toggleHistory()">Ver Histórico</button>
-
-    <a href="index.html" style="text-decoration: none;">
-        <button class="btn btn-p" style="background:#b8860b; margin-bottom:15px; width: 100%;">Voltar ao Menu Principal</button>
-    </a>
-
+    <a href="index.html" style="text-decoration: none;"><button class="btn btn-p" style="background:#b8860b; margin-bottom:15px; width:100%" id="btn-back">Voltar ao Menu</button></a>
+    
     <div class="guide-section">
         <span class="guide-title" id="tit-leg">Legenda de Cores</span>
         <div class="legend-item"><div class="dot" style="background:#ff4444"></div> <span id="leg-car">Carnívoro</span></div>
@@ -96,7 +87,6 @@
         <div class="legend-item"><div class="dot" style="background:#4444ff"></div> <span id="leg-pis">Piscívoro</span></div>
         <div class="legend-item"><div class="dot" style="background:#ffaa44"></div> <span id="leg-oni">Onívoro</span></div>
     </div>
-
     <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;" id="btn-close-menu">Fechar Menu</button>
 </div>
 
@@ -116,14 +106,13 @@
 </div>
 
 <script>
-    // LISTA DE DINOSSAUROS DO JURASSIC WORLD EVOLUTION 1 (JOGO 2)
     const DINOS = {
-        car: ["Indoraptor", "Indominus Rex", "T-Rex", "Spinoraptor", "Giganotosaurus", "Metriacanthosaurus", "Ceratosaurus", "Majungasaurus", "Deinonychus"],
-        her: ["Stegoceratops", "Ankylodocus", "Diplodocus", "Huayangosaurus", "Chungkingosaurus", "Gigantspinosaurus", "Nodosaurus", "Sauropelta"],
-        pis: ["Baryonyx", "Suchomimus", "Spinosaurus (JW1)", "Pteranodon (Legacy)"],
-        oni: ["Struthiomimus", "Archaeornithomimus", "Gallimimus"]
+        car: ["Indoraptor", "Indominus Rex", "T-Rex", "Spinoraptor", "Giganotosaurus", "Majungasaurus", "Baryonyx"],
+        her: ["Stegoceratops", "Ankylodocus", "Diplodocus", "Triceratops", "Stegosaurus"],
+        pis: ["Spinosaurus", "Suchomimus", "Pteranodon"],
+        oni: ["Gallimimus", "Struthiomimus", "Archaeornithomimus"]
     };
-    
+
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
     const CHANCES_EPIC = ["0%", "25%", "50%", "75%", "100%"];
     let currentLang = 'pt';
@@ -133,30 +122,52 @@
         pt: {
             head: "DINO GENERA: JW1", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote",
             btnBatch: "Gerar Agora", btnHist: "Ver Histórico", titLeg: "Legenda de Cores", car: "Carnívoro", her: "Herbívoro",
-            pis: "Piscívoro", oni: "Onívoro", titEpic: "Sobre o Modo Épico", descEpic: "Ative para garantir atributos positivos.",
-            btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
+            pis: "Piscívoro", oni: "Onívoro", btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
             histTitle: "HISTÓRICO COMPLETO", histClose: "FECHAR", atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...",
-            confirm: "Apagar todos os dinossauros?"
+            confirm: "Apagar tudo?", back: "Voltar ao Menu"
         },
         en: {
             head: "DINO GENERA: JW1", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate",
             btnBatch: "Generate Now", btnHist: "View History", titLeg: "Color Legend", car: "Carnivore", her: "Herbivore",
-            pis: "Piscivore", oni: "Omnivore", titEpic: "About Epic Mode", descEpic: "Enable for positive attributes only.",
-            btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
+            pis: "Piscivore", oni: "Omnivore", btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
             histTitle: "FULL HISTORY", histClose: "CLOSE", atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...",
-            confirm: "Delete all dinosaurs?"
+            confirm: "Delete all?", back: "Back to Menu"
         }
     };
 
-    // TODA A LÓGICA DE FUNCIONAMENTO (SPIN, ADD, MENU) PERMANECE A MESMA
     function changeLang(l) {
         currentLang = l;
         const d = LANG_DATA[l];
         document.getElementById('txt-head').innerText = d.head;
+        document.getElementById('txt-config-title').innerText = d.config;
+        document.getElementById('lbl-lang').innerText = d.lang;
+        document.getElementById('lbl-epic').innerText = d.epic;
+        document.getElementById('lbl-diet').innerText = d.diet;
+        document.getElementById('lbl-batch').innerText = d.batch;
+        document.getElementById('btn-batch').innerText = d.btnBatch;
+        document.getElementById('btn-view-hist').innerText = d.btnHist;
+        document.getElementById('btn-back').innerText = d.back;
+        document.getElementById('tit-leg').innerText = d.titLeg;
+        document.getElementById('leg-car').innerText = d.car;
+        document.getElementById('leg-her').innerText = d.her;
+        document.getElementById('leg-pis').innerText = d.pis;
+        document.getElementById('leg-oni').innerText = d.oni;
+        document.getElementById('btn-close-menu').innerText = d.btnClose;
         document.getElementById('btn-add').innerText = d.add;
         document.getElementById('btn-del-all').innerText = d.del;
         document.getElementById('btn-spin-all').innerText = d.spinAll;
+        document.getElementById('hist-title').innerText = d.histTitle;
+        document.getElementById('btn-close-hist').innerText = d.histClose;
         updateDietSelect();
+        
+        // Atualiza textos dentro dos cards já criados
+        document.querySelectorAll('.btn-p-card').forEach(b => b.innerText = d.spin);
+        document.querySelectorAll('.stat-label').forEach((label, index) => {
+            const type = index % 3;
+            if(type === 0) label.innerText = d.atk;
+            if(type === 1) label.innerText = d.def;
+            if(type === 2) label.innerText = d.ene;
+        });
     }
 
     function updateDietSelect() {
@@ -189,9 +200,9 @@
                 <button class="btn btn-r" onclick="this.parentElement.remove()">X</button>
                 <div class="display-result" id="res-${id}">${d.wait}</div>
                 <div class="grid-stats">
-                    <div class="box-stat"><span class="stat-label atk-lbl">${d.atk}</span><span class="val-stat" id="atk-${id}">--</span></div>
-                    <div class="box-stat"><span class="stat-label def-lbl">${d.def}</span><span class="val-stat" id="def-${id}">--</span></div>
-                    <div class="box-stat"><span class="stat-label ene-lbl">${d.ene}</span><span class="val-stat" id="ene-${id}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">${d.atk}</span><span class="val-stat" id="atk-${id}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">${d.def}</span><span class="val-stat" id="def-${id}">--</span></div>
+                    <div class="box-stat"><span class="stat-label">${d.ene}</span><span class="val-stat" id="ene-${id}">--</span></div>
                 </div>
                 <button class="btn btn-p btn-p-card" onclick="spinOne(${id})">${d.spin}</button>
             </div>`;
@@ -204,35 +215,28 @@
         const isEpic = document.getElementById('epic-mode').value === 'on';
         let pool = dietLock === 'all' ? [].concat(...Object.values(DINOS)) : DINOS[dietLock];
         const dino = pool[Math.floor(Math.random()*pool.length)];
-        let color = 'all';
+        let color = 'car';
         for(let [k, v] of Object.entries(DINOS)) if(v.includes(dino)) color = k;
+        
         document.getElementById(`res-${id}`).innerText = "...";
         setTimeout(() => {
             document.getElementById(`res-${id}`).innerText = "⭐ " + dino;
             card.className = `dino-card card-${color}`;
             const poolVals = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
-            const resStats = [];
             ['atk','def','ene'].forEach(s => {
-                let opts = [...poolVals];
-                if(Math.random() > 0.08) opts = opts.filter(v => v !== "100%" && v !== "-100%");
-                const val = opts[Math.floor(Math.random()*opts.length)];
-                resStats.push(val);
+                const val = poolVals[Math.floor(Math.random()*poolVals.length)];
                 const el = document.getElementById(`${s}-${id}`);
                 el.innerText = val;
                 el.className = 'val-stat ' + (val.includes('-') ? 'val-neg' : (val === '0%' ? '' : 'val-pos'));
             });
-            document.getElementById('history-content').insertAdjacentHTML('afterbegin', `<div class="hist-card"><b>${dino}</b><br><small>ATK:${resStats[0]} DEF:${resStats[1]} ENE:${resStats[2]}</small></div>`);
+            document.getElementById('history-content').insertAdjacentHTML('afterbegin', `<div class="hist-card"><b>${dino}</b></div>`);
         }, 400);
     }
 
-    function clearAll() { if(confirm(LANG_DATA[currentLang].confirm)) document.getElementById('wrapper-list').innerHTML = ""; }
     function batchAdd() { const q = document.getElementById('batch-qty').value; for(let i=0; i<q; i++) addCard(); toggleMenu(); }
-    function spinAll() { document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1])); }
-
     document.getElementById('btn-add').onclick = addCard;
-    document.getElementById('btn-del-all').onclick = clearAll;
-    document.getElementById('btn-spin-all').onclick = spinAll;
-
+    document.getElementById('btn-del-all').onclick = () => { if(confirm(LANG_DATA[currentLang].confirm)) document.getElementById('wrapper-list').innerHTML = ""; };
+    document.getElementById('btn-spin-all').onclick = () => { document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1])); };
     window.onload = () => { updateDietSelect(); addCard(); };
 </script>
 </body>
