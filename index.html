@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dino Genera Hub - Ultra Random</title>
+    <title>Dino Genera Hub - Final</title>
     <style>
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
@@ -11,13 +11,21 @@
         header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
         .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--a); }
         
+        /* SIDEBAR - Corrigido para esconder totalmente */
         .sidebar { 
-            position: fixed; left: -300px; top: 0; width: 280px; height: 100%; 
-            background: var(--c); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: fixed; 
+            left: -320px; /* Esconde além da largura para garantir */
+            top: 0; 
+            width: 280px; 
+            height: 100%; 
+            background: var(--c); 
+            z-index: 2000; 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
             padding: 25px; border-right: 2px solid var(--p); box-shadow: 10px 0 20px rgba(0,0,0,0.8);
             display: flex; flex-direction: column;
         }
-        .sidebar.open { transform: translateX(300px); }
+        /* Quando aberto, move o menu para a posição 0 */
+        .sidebar.open { transform: translateX(320px); }
 
         .side-item { margin-bottom: 25px; }
         .side-item label { display: block; margin-bottom: 8px; font-weight: bold; color: #888; font-size: 0.8rem; }
@@ -45,7 +53,9 @@
         .btn-all { background: #2e7d32; color: white; padding: 12px 25px; box-shadow: 0 4px 0 #1b471d; }
         .btn-r { background: #333; color: var(--r); padding: 5px 10px; font-size: 0.8rem; position: absolute; top: 12px; right: 12px; border-radius: 5px; border: 1px solid var(--r); }
 
-        .signature { margin-top: auto; padding-top: 20px; border-top: 1px solid #333; font-size: 0.8rem; color: #777; line-height: 1.4; }
+        /* Assinatura Bilíngue no Menu */
+        .signature { margin-top: auto; padding-top: 15px; border-top: 1px solid #333; font-size: 0.75rem; color: #666; }
+        .sig-text { margin-bottom: 8px; display: block; }
     </style>
 </head>
 <body>
@@ -56,7 +66,7 @@
     <h3 id="txt-opts" style="color:var(--a); margin-top:0;">Configurações</h3>
     
     <div class="side-item">
-        <label id="txt-lang">IDIOMA / LANGUAGE</label>
+        <label id="txt-lang-lbl">IDIOMA / LANGUAGE</label>
         <select onchange="changeLang(this.value)">
             <option value="pt">Português</option>
             <option value="en">English</option>
@@ -64,18 +74,13 @@
     </div>
 
     <div class="side-item">
-        <label id="txt-diet">DIETA DOS DINOS</label>
+        <label id="txt-diet-lbl">DIETA DOS DINOS</label>
         <select id="diet-select">
-            <option value="all">Todos / All</option>
-            <option value="car">Carnívoros</option>
-            <option value="her">Herbívoros</option>
-            <option value="pis">Piscívoros</option>
-            <option value="oni">Onívoros</option>
-        </select>
+            </select>
     </div>
 
     <div class="side-item">
-        <label id="txt-batch">GERAR EM LOTE (QTD)</label>
+        <label id="txt-batch-lbl">GERAR EM LOTE (QTD)</label>
         <input type="number" id="batch-qty" value="1" min="1" max="24">
         <button class="btn btn-p" style="margin-top:10px" onclick="batchAdd()" id="txt-gen-btn">Gerar Agora</button>
     </div>
@@ -83,8 +88,8 @@
     <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;">Fechar Menu</button>
 
     <div class="signature">
-        <span id="txt-sig-pt">Isaac criou esta roleta, espero que seja útil.</span><br><br>
-        <span id="txt-sig-en" style="font-style: italic;">Isaac created this roulette, I hope it's useful.</span>
+        <span class="sig-text">Isaac criou esta roleta, espero que seja útil.</span>
+        <span class="sig-text" style="font-style: italic; opacity: 0.7;">Isaac created this roulette, I hope it's useful.</span>
     </div>
 </div>
 
@@ -115,9 +120,49 @@
     let currentLang = 'pt';
 
     const T = {
-        pt: { opts: "Configurações", lang: "IDIOMA", diet: "DIETA DOS DINOS", batch: "GERAR EM LOTE (QTD)", genBtn: "Gerar Agora", head: "DINO GENERA", addBtn: "+ ADICIONAR", spinAll: "GIRAR TODOS", girar: "GIRAR", remover: "Apagar", dietLabels: {all: "CRIATURA", car: "CARNÍVORO", her: "HERBÍVORO", pis: "PISCÍVORO", oni: "ONÍVORO"} },
-        en: { opts: "Settings", lang: "LANGUAGE", diet: "DINO DIET", batch: "BATCH QTY", genBtn: "Generate Now", head: "DINO GENERA", addBtn: "+ ADD DINO", spinAll: "SPIN ALL", girar: "SPIN", remover: "Delete", dietLabels: {all: "CREATURE", car: "CARNIVORE", her: "HERBIVORE", pis: "PISCIVORE", oni: "OMNIVORE"} }
+        pt: { 
+            opts: "Configurações", 
+            lang: "IDIOMA", 
+            diet: "DIETA DOS DINOS", 
+            batch: "GERAR EM LOTE (QTD)", 
+            genBtn: "Gerar Agora", 
+            head: "DINO GENERA", 
+            addBtn: "+ ADICIONAR", 
+            spinAll: "GIRAR TODOS", 
+            girar: "GIRAR", 
+            remover: "Apagar",
+            diets: {all: "Todos", car: "Carnívoros", her: "Herbívoros", pis: "Piscívoros", oni: "Onívoros"},
+            labels: {all: "CRIATURA", car: "CARNÍVORO", her: "HERBÍVORO", pis: "PISCÍVORO", oni: "ONÍVORO"}
+        },
+        en: { 
+            opts: "Settings", 
+            lang: "LANGUAGE", 
+            diet: "DINO DIET", 
+            batch: "BATCH QTY", 
+            genBtn: "Generate Now", 
+            head: "DINO GENERA", 
+            addBtn: "+ ADD DINO", 
+            spinAll: "SPIN ALL", 
+            girar: "SPIN", 
+            remover: "Delete",
+            diets: {all: "All", car: "Carnivores", her: "Herbivores", pis: "Piscivores", oni: "Omnivores"},
+            labels: {all: "CREATURE", car: "CARNIVORE", her: "HERBIVORE", pis: "PISCIVORE", oni: "OMNIVORE"}
+        }
     };
+
+    function updateDietSelect() {
+        const select = document.getElementById('diet-select');
+        const currentVal = select.value || 'all';
+        const diets = T[currentLang].diets;
+        select.innerHTML = `
+            <option value="all">${diets.all}</option>
+            <option value="car">${diets.car}</option>
+            <option value="her">${diets.her}</option>
+            <option value="pis">${diets.pis}</option>
+            <option value="oni">${diets.oni}</option>
+        `;
+        select.value = currentVal;
+    }
 
     function toggleMenu() {
         const s = document.getElementById('sidebar');
@@ -130,13 +175,16 @@
         currentLang = l;
         const data = T[l];
         document.getElementById('txt-opts').innerText = data.opts;
-        document.getElementById('txt-lang').innerText = data.lang;
-        document.getElementById('txt-diet').innerText = data.diet;
-        document.getElementById('txt-batch').innerText = data.batch;
+        document.getElementById('txt-lang-lbl').innerText = data.lang;
+        document.getElementById('txt-diet-lbl').innerText = data.diet;
+        document.getElementById('txt-batch-lbl').innerText = data.batch;
         document.getElementById('txt-gen-btn').innerText = data.genBtn;
         document.getElementById('txt-head').innerText = data.head;
         document.getElementById('txt-add-btn').innerText = data.addBtn;
         document.getElementById('txt-spin-all').innerText = data.spinAll;
+        
+        updateDietSelect();
+        
         document.querySelectorAll('.btn-girar').forEach(b => b.innerText = data.girar);
         document.querySelectorAll('.btn-r').forEach(b => b.innerText = data.remover);
     }
@@ -145,8 +193,8 @@
         cardCount++;
         const container = document.getElementById('wrapper-list');
         const id = cardCount;
-        const dietValue = document.getElementById('diet-select').value;
-        const label = initialText || T[currentLang].dietLabels.all;
+        const dietValue = document.getElementById('diet-select').value || 'all';
+        const label = initialText || T[currentLang].labels.all;
 
         const html = `
             <div class="dino-card" id="card-${id}" data-diet-lock="${dietValue}">
@@ -166,7 +214,7 @@
     function batchAdd() {
         const qty = parseInt(document.getElementById('batch-qty').value);
         const dietKey = document.getElementById('diet-select').value;
-        const label = T[currentLang].dietLabels[dietKey];
+        const label = T[currentLang].labels[dietKey];
         for(let i=0; i<qty; i++) addCard(label);
         toggleMenu();
     }
@@ -186,27 +234,20 @@
         }, 50);
 
         const stats = [`stat-a-${id}`, `stat-d-${id}`, `stat-e-${id}`];
-        let usedValues = []; // Lista de valores já sorteados neste card
+        let usedValues = [];
 
         stats.forEach((sid, index) => {
-            // Regra de Seleção Inteligente
             let options = [...CHANCES];
-            
-            // 1. Reduz a chance de repetir qualquer valor (25%, 50%, 75%) que já saiu no card
             usedValues.forEach(val => {
-                if(val !== "100%" && val !== "0%") {
-                    // Se o valor já saiu, tem 80% de chance de ser removido das opções deste slot
-                    if(Math.random() < 0.80) options = options.filter(v => v !== val);
+                if(val !== "100%" && val !== "0%" && Math.random() < 0.80) {
+                    options = options.filter(v => v !== val);
                 }
             });
 
-            // 2. Mantém a regra rara de 5% para 100% e 0% duplicados
             if(usedValues.includes("100%") && Math.random() > 0.05) options = options.filter(v => v !== "100%");
             if(usedValues.includes("0%") && Math.random() > 0.05) options = options.filter(v => v !== "0%");
 
-            // Se sobrar nada (improvável), reseta
             if(options.length === 0) options = [...CHANCES];
-
             const final = options[Math.floor(Math.random()*options.length)];
             usedValues.push(final);
 
@@ -222,7 +263,11 @@
         document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1]));
     }
 
-    window.onload = () => addCard();
+    // Inicialização
+    window.onload = () => {
+        updateDietSelect();
+        addCard();
+    };
 </script>
 </body>
 </html>
