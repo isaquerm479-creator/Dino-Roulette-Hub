@@ -8,6 +8,7 @@
         :root { 
             --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; 
             --a: #ffca28; --t: #f0f0f0; --r: #c62828; 
+            --dlc-bg: #0f1610; 
         }
         
         body { 
@@ -35,16 +36,33 @@
             display: none; z-index: 1500; backdrop-filter: blur(3px); 
         }
 
-        /* DLC Estilo */
-        .dlc-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #222; margin-bottom: 5px; padding: 8px; border-radius: 5px;
-            font-size: 0.8rem; cursor: pointer; border: 1px solid #444;
+        /* --- NOVO ESTILO DLC FULL SCREEN --- */
+        .dlc-overlay {
+            position: fixed; inset: 0; background: var(--dlc-bg); z-index: 3000;
+            display: none; flex-direction: column; padding: 20px;
+            animation: fadeIn 0.3s ease;
         }
-        .dlc-active { border-color: #4caf50; background: #1b3d1d; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
-        .active-dot { background: #44ff44; box-shadow: 0 0 5px #44ff44; }
+        .dlc-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--a); padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .dlc-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 15px; overflow-y: auto; flex: 1;
+        }
+        .dlc-card {
+            background: #222; border: 1px solid #444; border-radius: 8px;
+            padding: 15px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.2s; text-align: center;
+        }
+        .dlc-card.active { border-color: #4caf50; background: #1b3d1d; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3); }
+        .dlc-card span { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; }
+        .active .status-dot { background: #44ff44; box-shadow: 0 0 5px #44ff44; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* Guia e Botões */
         .guide-section { 
             background: #111; padding: 12px; border-radius: 10px; 
             margin-bottom: 15px; border: 1px solid #333; 
@@ -112,6 +130,15 @@
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
+<div class="dlc-overlay" id="dlc-screen">
+    <div class="dlc-header">
+        <h2 style="color:var(--a); margin:0;" id="dlc-title-screen">DLC: JW REVOLUTION 3</h2>
+        <button class="btn" onclick="toggleDLCScreen()" style="background:#333; color:white; padding:10px 20px;" id="btn-close-dlc">FECHAR / VOLTAR</button>
+    </div>
+    <div class="dlc-grid" id="dlc-grid-container">
+        </div>
+</div>
+
 <div class="sidebar" id="sidebar">
     <h3 id="txt-side-title" style="color:var(--a); margin-top:0;">PAINEL DE CRIAÇÃO</h3>
     
@@ -131,18 +158,10 @@
     </div>
 
     <div class="side-item">
-        <label id="lbl-dlc">DLC: JW Revolution 3</label>
-        <div id="dlc-container">
-            <div class="dlc-item dlc-active" onclick="toggleDLC(this, 'car', 'Indoraptor Gen 2')">
-                <span>Indoraptor G2</span> <div class="status-dot active-dot"></div>
-            </div>
-            <div class="dlc-item dlc-active" onclick="toggleDLC(this, 'her', 'Amargasaurus')">
-                <span>Amargasaurus</span> <div class="status-dot active-dot"></div>
-            </div>
-            <div class="dlc-item dlc-active" onclick="toggleDLC(this, 'pis', 'Spinosaurus Gen 2')">
-                <span>Spinosaurus G2</span> <div class="status-dot active-dot"></div>
-            </div>
-        </div>
+        <label id="lbl-dlc">Conteúdo Extra</label>
+        <button class="btn" style="width:100%; background:#222; border:1px solid var(--a); color:var(--a); padding:15px;" onclick="toggleDLCScreen()" id="btn-open-dlc">
+            GERENCIAR DLC
+        </button>
     </div>
 
     <div class="side-item">
@@ -181,6 +200,7 @@
 </div>
 
 <script>
+    // LISTA PRINCIPAL
     const DINOS = {
         car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus", "Majungasaurus", "Allosaurus", "Spinosaurus"],
         her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Parasaurolophus", "Iguanodon"],
@@ -188,16 +208,21 @@
         oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Struthiomimus"]
     };
 
-    // Dinossauros Iniciais da DLC (Ativados por padrão)
-    const DLC_DINOS = {
-        car: ["Indoraptor Gen 2"],
-        her: ["Amargasaurus"],
-        pis: ["Spinosaurus Gen 2"],
-        oni: []
-    };
+    // LISTA DLC (Dados Puros - Modifique aqui para adicionar mais)
+    const DLC_DATA = [
+        { name: "Indoraptor Gen 2", type: "car" },
+        { name: "Amargasaurus", type: "her" },
+        { name: "Spinosaurus Gen 2", type: "pis" },
+        { name: "Scorpios Rex", type: "car" }, // Exemplo Extra
+        { name: "Microceratus", type: "her" }  // Exemplo Extra
+    ];
 
-    // Mesclar DLC ao Pool inicial
-    for(let k in DLC_DINOS) DINOS[k] = [...DINOS[k], ...DLC_DINOS[k]];
+    // Inicializa DLC no pool principal
+    DLC_DATA.forEach(dino => {
+        if(!DINOS[dino.type].includes(dino.name)) {
+            DINOS[dino.type].push(dino.name);
+        }
+    });
 
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
     const CHANCES_EPIC = ["0%", "25%", "50%", "75%", "100%"];
@@ -213,7 +238,10 @@
             optAll: "Aleatório", optCar: "Carnívoros", optHer: "Herbívoros", optPis: "Piscívoros", optOni: "Onívoros",
             btnMulti: "+ ADICIONAR VÁRIOS",
             lblSettings: "Configurações",
-            lblDLC: "DLC: JW Revolution 3",
+            lblDLC: "Conteúdo Extra",
+            btnOpenDLC: "GERENCIAR DLC",
+            dlcTitleScreen: "DLC: JW REVOLUTION 3",
+            btnCloseDLC: "FECHAR / VOLTAR",
             optNormal: "Modo Normal", optEpic: "Modo Épico (Sorte 🍀)",
             guideTitle: "Significado das Cores",
             legCar: "Carnívoro", legHer: "Herbívoro", legPis: "Piscívoro", legOni: "Onívoro",
@@ -231,7 +259,10 @@
             optAll: "Random", optCar: "Carnivores", optHer: "Herbivores", optPis: "Piscivores", optOni: "Omnivores",
             btnMulti: "+ ADD MULTIPLE",
             lblSettings: "Settings",
-            lblDLC: "DLC: JW Revolution 3",
+            lblDLC: "Extra Content",
+            btnOpenDLC: "MANAGE DLC",
+            dlcTitleScreen: "DLC: JW REVOLUTION 3",
+            btnCloseDLC: "CLOSE / BACK",
             optNormal: "Normal Mode", optEpic: "Epic Mode (Luck 🍀)",
             guideTitle: "Color Meaning",
             legCar: "Carnivore", legHer: "Herbivore", legPis: "Piscivore", legOni: "Omnivore",
@@ -244,46 +275,66 @@
         }
     };
 
-    function toggleDLC(el, type, name) {
-        const isActive = el.classList.toggle('dlc-active');
-        const dot = el.querySelector('.status-dot');
-        dot.classList.toggle('active-dot');
+    // --- FUNÇÕES DE SISTEMA ---
+
+    function initDLCScreen() {
+        const container = document.getElementById('dlc-grid-container');
+        container.innerHTML = '';
+        
+        DLC_DATA.forEach((dino, index) => {
+            // Cria o elemento visualmente
+            const card = document.createElement('div');
+            card.className = 'dlc-card active'; // Começa ativado
+            card.id = `dlc-btn-${index}`;
+            card.onclick = () => toggleDLCLogic(index, dino.type, dino.name);
+            
+            card.innerHTML = `
+                <span>${dino.name}</span>
+                <div class="status-dot"></div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function toggleDLCLogic(index, type, name) {
+        const el = document.getElementById(`dlc-btn-${index}`);
+        const isActive = el.classList.toggle('active');
 
         if (isActive) {
+            // Adicionar se não existir
             if (!DINOS[type].includes(name)) DINOS[type].push(name);
         } else {
+            // Remover
             DINOS[type] = DINOS[type].filter(d => d !== name);
         }
+    }
+
+    function toggleDLCScreen() {
+        const s = document.getElementById('dlc-screen');
+        s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
     }
 
     function changeLang(l) {
         currentLang = l;
         const t = TRANSLATIONS[l];
         
-        document.getElementById('txt-head').innerText = t.head;
-        document.getElementById('txt-side-title').innerText = t.sideTitle;
-        document.getElementById('lbl-mass').innerText = t.lblMass;
-        document.getElementById('opt-all').innerText = t.optAll;
-        document.getElementById('opt-car').innerText = t.optCar;
-        document.getElementById('opt-her').innerText = t.optHer;
-        document.getElementById('opt-pis').innerText = t.optPis;
-        document.getElementById('opt-oni').innerText = t.optOni;
-        document.getElementById('btn-multi-add').innerText = t.btnMulti;
-        document.getElementById('lbl-settings').innerText = t.lblSettings;
-        document.getElementById('lbl-dlc').innerText = t.lblDLC;
-        document.getElementById('opt-normal').innerText = t.optNormal;
-        document.getElementById('opt-epic').innerText = t.optEpic;
-        document.getElementById('txt-guide-title').innerText = t.guideTitle;
-        document.getElementById('leg-car').innerText = t.legCar;
-        document.getElementById('leg-her').innerText = t.legHer;
-        document.getElementById('leg-pis').innerText = t.legPis;
-        document.getElementById('leg-oni').innerText = t.legOni;
-        document.getElementById('btn-exit').innerText = t.btnExit;
-        document.getElementById('btn-close-menu').innerText = t.btnClose;
-        
-        document.getElementById('btn-spin-all').innerText = t.btnSpinAll;
-        document.getElementById('btn-add-main').innerText = t.btnAddMain;
-        document.getElementById('btn-del-all').innerText = t.btnDelAll;
+        // Mapeamento de Textos
+        const map = {
+            'txt-head': t.head, 'txt-side-title': t.sideTitle, 'lbl-mass': t.lblMass,
+            'opt-all': t.optAll, 'opt-car': t.optCar, 'opt-her': t.optHer,
+            'opt-pis': t.optPis, 'opt-oni': t.optOni, 'btn-multi-add': t.btnMulti,
+            'lbl-settings': t.lblSettings, 'lbl-dlc': t.lblDLC, 'btn-open-dlc': t.btnOpenDLC,
+            'dlc-title-screen': t.dlcTitleScreen, 'btn-close-dlc': t.btnCloseDLC,
+            'opt-normal': t.optNormal, 'opt-epic': t.optEpic, 'txt-guide-title': t.guideTitle,
+            'leg-car': t.legCar, 'leg-her': t.legHer, 'leg-pis': t.legPis, 'leg-oni': t.legOni,
+            'btn-exit': t.btnExit, 'btn-close-menu': t.btnClose,
+            'btn-spin-all': t.btnSpinAll, 'btn-add-main': t.btnAddMain, 'btn-del-all': t.btnDelAll
+        };
+
+        for (const [id, text] of Object.entries(map)) {
+            const el = document.getElementById(id);
+            if(el) el.innerText = text;
+        }
 
         document.querySelectorAll('.display-result').forEach(el => {
             if(el.innerText.includes("AGUARDANDO") || el.innerText.includes("WAITING")) el.innerText = t.waiting;
@@ -325,7 +376,7 @@
         let pool = (dietType === 'all') ? [].concat(...Object.values(DINOS)) : DINOS[dietType];
         
         if (pool.length === 0) {
-            document.getElementById(`res-${id}`).innerText = "EMPTY POOL";
+            document.getElementById(`res-${id}`).innerText = "EMPTY / VAZIO";
             return;
         }
 
@@ -358,6 +409,8 @@
         o.style.display = s.classList.contains('open') ? 'block' : 'none';
     }
 
+    // Inicialização
+    initDLCScreen();
     addCard();
 </script>
 </body>
