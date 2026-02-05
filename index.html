@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dino Genera Ultra - JWE2 (Jogo 3)</title>
+    <title>Dino Genera Ultra - Franchise Hub</title>
     <style>
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
@@ -69,9 +69,9 @@
 <div id="hub-selector">
     <h1 id="hub-title">DINO GENERA HUB</h1>
     
-    <div class="hub-card" onclick="startApp(3)">
-        <h2 id="hub-game3-title">Jurassic World Evolution 2</h2>
-        <p id="hub-game3-desc">Módulo: World 3 / Dominion (Jogo 3)</p>
+    <div class="hub-card" style="opacity:0.6; cursor: default;">
+        <h2 id="hub-soon-title">Jurassic Park OG</h2>
+        <p id="hub-soon-desc">Módulo: World 1 / Classic JP (Jogo 1)</p>
     </div>
 
     <a href="jogo2.html" class="hub-card">
@@ -79,9 +79,9 @@
         <p id="hub-game2-desc">Módulo: World 2 / Classic JW (Jogo 2)</p>
     </a>
 
-    <div class="hub-card" style="opacity:0.5; cursor: default;">
-        <h2 id="hub-soon-title">Jogo 1 - Em breve...</h2>
-        <p id="hub-soon-desc">JP Clássico & JPOG Mode</p>
+    <div class="hub-card" onclick="startApp(3)">
+        <h2 id="hub-game3-title">Jurassic World Evolution 2</h2>
+        <p id="hub-game3-desc">Módulo: World 3 / Dominion (Jogo 3)</p>
     </div>
 
     <div class="hub-credits" id="hub-credits">Esta roleta foi feita por Isaque, espero que goste.</div>
@@ -165,7 +165,12 @@
 
     const LANG_DATA = {
         pt: {
-            hubTitle: "DINO GENERA HUB", hubG3Desc: "Módulo: World 3 / Dominion (Jogo 3)", hubSoon: "Jogo 1 - Em breve...", hubCredits: "Feito por Isaque, espero que goste.",
+            hubTitle: "DINO GENERA HUB", 
+            hubG1Desc: "Módulo: World 1 / Classic JP (Jogo 1)",
+            hubG2Desc: "Módulo: World 2 / Classic JW (Jogo 2)",
+            hubG3Desc: "Módulo: World 3 / Dominion (Jogo 3)", 
+            hubSoon: "Jurassic Park OG", 
+            hubCredits: "Feito por Isaque, espero que goste.",
             head: "DINO GENERA: JWE2", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote",
             car: "Carnívoro", her: "Herbívoro", pis: "Piscívoro", oni: "Onívoro", btnBatch: "Gerar Agora", btnHist: "Ver Histórico",
             btnChange: "Trocar de Jogo", btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
@@ -173,7 +178,12 @@
             titLeg: "Legenda de Cores", titEpic: "Sobre o Modo Épico", descEpic: "Ative para garantir atributos positivos. Desative para incluir desafios negativos."
         },
         en: {
-            hubTitle: "DINO GENERA HUB", hubG3Desc: "Module: World 3 / Dominion (Game 3)", hubSoon: "Game 1 - Soon...", hubCredits: "Created by Isaque, hope you like it.",
+            hubTitle: "DINO GENERA HUB", 
+            hubG1Desc: "Module: World 1 / Classic JP (Game 1)",
+            hubG2Desc: "Module: World 2 / Classic JW (Game 2)",
+            hubG3Desc: "Module: World 3 / Dominion (Game 3)", 
+            hubSoon: "Jurassic Park OG", 
+            hubCredits: "Created by Isaque, hope you like it.",
             head: "DINO GENERA: JWE2", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate",
             car: "Carnivore", her: "Herbivore", pis: "Piscivore", oni: "Omnivore", btnBatch: "Generate Now", btnHist: "View History",
             btnChange: "Change Game", btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
@@ -195,6 +205,8 @@
         const d = LANG_DATA[l];
         document.getElementById('hub-title').innerText = d.hubTitle;
         document.getElementById('hub-game3-desc').innerText = d.hubG3Desc;
+        document.getElementById('hub-game2-desc').innerText = d.hubG2Desc;
+        document.getElementById('hub-soon-desc').innerText = d.hubG1Desc;
         document.getElementById('hub-soon-title').innerText = d.hubSoon;
         document.getElementById('hub-credits').innerText = d.hubCredits;
         document.getElementById('txt-head').innerText = d.head;
@@ -221,7 +233,6 @@
         document.getElementById('desc-epic').innerText = d.descEpic;
         
         updateDietSelect();
-        // Corrige os textos de espera nos cards
         document.querySelectorAll('.display-result').forEach(res => {
             if(res.innerText === "AGUARDANDO..." || res.innerText === "WAITING...") res.innerText = d.wait;
         });
