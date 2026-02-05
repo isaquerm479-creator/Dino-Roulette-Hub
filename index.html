@@ -3,29 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dino Genera Ultra - Franchise Hub</title>
+    <title>Dino Genera Ultra - JWE2</title>
     <style>
-        /* AQUI MANTIVE TODA A SUA ESTILIZAÇÃO ORIGINAL */
+        /* MANTIVE TODO O SEU CSS DE OURO AQUI */
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* --- ESTILO DO INICIALIZADOR (MENU) --- */
-        #hub-selector {
-            position: fixed; inset: 0; background: var(--d); z-index: 5000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
-        }
-        .hub-card { 
-            background: var(--c); border: 2px solid var(--p); border-radius: 15px; 
-            padding: 20px; width: 100%; max-width: 350px; margin: 10px; cursor: pointer; 
-            text-align: center; transition: 0.3s;
-        }
-        .hub-card:hover { border-color: var(--a); transform: scale(1.02); }
-        .hub-card h2 { margin: 0; color: var(--a); font-size: 1.2rem; }
-        .hub-card p { margin: 5px 0 0; font-size: 0.8rem; color: #777; }
-        .hub-credits { position: absolute; bottom: 20px; font-size: 0.8rem; color: #444; }
+        /* ESTILO DO MENU DE ENTRADA */
+        #menu-entrada { position: fixed; inset: 0; background: var(--d); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .card-menu { background: var(--c); border: 2px solid var(--p); border-radius: 15px; padding: 20px; width: 100%; max-width: 350px; margin: 10px; cursor: pointer; text-align: center; transition: 0.3s; text-decoration: none; color: inherit; }
+        .card-menu:hover { border-color: var(--a); transform: scale(1.05); }
+        .card-menu h2 { margin: 0; color: var(--a); font-size: 1.2rem; }
+        .card-menu p { margin: 5px 0 0; font-size: 0.8rem; color: #777; }
+        .creditos-menu { position: absolute; bottom: 20px; font-size: 0.8rem; color: #444; }
 
-        /* --- SEUS ESTILOS ORIGINAIS --- */
+        /* SEUS ESTILOS ORIGINAIS ABAIXO */
         header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
+        .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--a); }
         .sidebar { position: fixed; left: -320px; top: 0; width: 280px; height: 100%; background: var(--c); z-index: 2000; transition: transform 0.4s; padding: 25px; border-right: 2px solid var(--p); display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box;}
         .sidebar.open { transform: translateX(320px); }
         .side-item { margin-bottom: 20px; }
@@ -36,7 +30,12 @@
         .history-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); padding-bottom: 10px; margin-bottom: 20px; }
         #history-content { overflow-y: auto; flex-grow: 1; }
         .hist-card { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid var(--a); }
-        .main-content { padding: 20px; display: none; flex-direction: column; align-items: center; } /* Começa escondido */
+        .guide-section { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
+        .guide-title { font-size: 0.7rem; color: var(--a); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .legend-item { display: flex; align-items: center; font-size: 0.75rem; margin-bottom: 4px; color: #bbb; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+        .epic-desc { font-size: 0.7rem; color: #888; line-height: 1.3; }
+        .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
         .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; transition: 0.5s ease; margin-bottom: 20px; }
         .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
@@ -60,20 +59,20 @@
 </head>
 <body>
 
-<div id="hub-selector">
-    <h1 id="hub-title">DINO GENERA HUB</h1>
+<div id="menu-entrada">
+    <h1 style="color:var(--a); margin-bottom:30px;">DINO GENERA HUB</h1>
     
-    <div class="hub-card" onclick="startApp(3)">
-        <h2>Jurassic World Evolution 2</h2>
-        <p>Módulo: World 3 / Dominion</p>
+    <div class="card-menu" onclick="document.getElementById('menu-entrada').style.display='none'">
+        <h2>JURASSIC WORLD 3</h2>
+        <p>Evolution 2 / Dominion Edition</p>
     </div>
 
-    <div class="hub-card" style="opacity:0.6">
-        <h2>Em breve...</h2>
-        <p>Módulos JWE1, JPOG e GO</p>
-    </div>
+    <a href="jogo2.html" class="card-menu">
+        <h2>JURASSIC WORLD 2</h2>
+        <p>Evolution 1 Edition</p>
+    </a>
 
-    <div class="hub-credits" id="hub-credits">Esta roleta foi feita por Isaque, espero que goste.</div>
+    <div class="creditos-menu">Esta roleta foi feita por Isaque, espero que goste.</div>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
@@ -81,7 +80,7 @@
 <div class="history-modal" id="history-modal">
     <div class="history-header">
         <h2 id="hist-title" style="margin:0; color:var(--a);">HISTÓRICO COMPLETO</h2>
-        <button class="btn btn-clear" onclick="toggleHistory()">FECHAR</button>
+        <button class="btn btn-clear" id="btn-close-hist" onclick="toggleHistory()">FECHAR</button>
     </div>
     <div id="history-content"></div>
 </div>
@@ -90,7 +89,7 @@
     <h3 id="txt-config-title" style="color:var(--a); margin-top:0;">Configurações</h3>
     <div class="side-item">
         <label id="lbl-lang">Idioma</label>
-        <select id="lang-select" onchange="changeLang(this.value)"><option value="pt">Português</option><option value="en">English</option></select>
+        <select onchange="changeLang(this.value)"><option value="pt">Português</option><option value="en">English</option></select>
     </div>
     <div class="side-item">
         <label id="lbl-epic">Modo Épico</label>
@@ -106,17 +105,19 @@
         <button class="btn btn-p" style="margin-top:10px" onclick="batchAdd()">Gerar Agora</button>
     </div>
     <button class="btn btn-p" style="background:#444; margin-bottom:15px" onclick="toggleHistory()">Ver Histórico</button>
-    <button class="btn btn-p" onclick="location.reload()" style="background:#b8860b; margin-bottom:15px">Trocar de Jogo</button>
+    
+    <button class="btn btn-p" onclick="location.reload()" style="background:#b8860b; margin-bottom:15px">Voltar ao Menu</button>
+    
     <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;" id="btn-close-menu">Fechar Menu</button>
 </div>
 
-<header id="app-header" style="display:none">
+<header>
     <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <b id="txt-head">DINO GENERA</b>
+    <b id="txt-head">DINO GENERA: JW3</b>
     <div style="width: 30px"></div>
 </header>
 
-<div class="main-content" id="app-content">
+<div class="main-content">
     <div class="top-btns">
         <button class="btn btn-a" id="btn-add">+ ADICIONAR</button>
         <button class="btn btn-clear" id="btn-del-all">APAGAR TODOS</button>
@@ -126,41 +127,24 @@
 </div>
 
 <script>
-    // LISTA FOCO: JURASSIC WORLD EVOLUTION 2 (JOGO 3)
+    // LISTA DO JOGO 3 (JWE2)
     const DINOS = {
-        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus", "Allosaurus", "Spinosaurus", "Majungasaurus", "Qianzhousaurus"],
-        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Amargasaurus", "Parasaurolophus", "Microceratus", "Alamosaurus"],
-        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus", "Dimorphodon", "Tylosaurus", "Kronosaurus", "Archelon"],
-        oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Archaeornithomimus", "Gigantoraptor"]
+        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus", "Allosaurus", "Spinosaurus"],
+        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Amargasaurus", "Parasaurolophus"],
+        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus", "Dimorphodon", "Tylosaurus"],
+        oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Archaeornithomimus"]
     };
     
+    // REPETE TODA A LÓGICA DO SEU CÓDIGO DE OURO AQUI...
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
     const CHANCES_EPIC = ["0%", "25%", "50%", "75%", "100%"];
     let currentLang = 'pt';
     let cardCount = 0;
 
     const LANG_DATA = {
-        pt: {
-            head: "DINO GENERA: JWE2", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote",
-            titLeg: "Legenda de Cores", car: "Carnívoro", her: "Herbívoro", pis: "Piscívoro", oni: "Onívoro",
-            btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
-            atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...", confirm: "Apagar tudo?"
-        },
-        en: {
-            head: "DINO GENERA: JWE2", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate",
-            titLeg: "Color Legend", car: "Carnivore", her: "Herbivore", pis: "Piscivore", oni: "Omnivore",
-            btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
-            atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...", confirm: "Delete all?"
-        }
+        pt: { head: "DINO GENERA: JW3", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote", btnBatch: "Gerar Agora", btnHist: "Ver Histórico", titLeg: "Legenda de Cores", car: "Carnívoro", her: "Herbívoro", pis: "Piscívoro", oni: "Onívoro", titEpic: "Sobre o Modo Épico", descEpic: "Ative para garantir atributos positivos.", btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR", histTitle: "HISTÓRICO COMPLETO", histClose: "FECHAR", atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...", confirm: "Apagar tudo?" },
+        en: { head: "DINO GENERA: JW3", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate", btnBatch: "Generate Now", btnHist: "View History", titLeg: "Color Legend", car: "Carnivore", her: "Herbivore", pis: "Piscivore", oni: "Omnivore", titEpic: "About Epic Mode", descEpic: "Enable for positive attributes only.", btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN", histTitle: "FULL HISTORY", histClose: "CLOSE", atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...", confirm: "Delete all?" }
     };
-
-    function startApp(gameId) {
-        document.getElementById('hub-selector').style.display = 'none';
-        document.getElementById('app-header').style.display = 'flex';
-        document.getElementById('app-content').style.display = 'flex';
-        updateDietSelect();
-        addCard();
-    }
 
     function changeLang(l) {
         currentLang = l;
@@ -176,9 +160,7 @@
         const s = document.getElementById('diet-select');
         const v = s.value || 'all';
         const d = LANG_DATA[currentLang];
-        s.innerHTML = `<option value="all">${currentLang === 'pt' ? 'Todos' : 'All'}</option>
-                      <option value="car">${d.car}</option><option value="her">${d.her}</option>
-                      <option value="pis">${d.pis}</option><option value="oni">${d.oni}</option>`;
+        s.innerHTML = `<option value="all">${currentLang === 'pt' ? 'Todos' : 'All'}</option><option value="car">${d.car}</option><option value="her">${d.her}</option><option value="pis">${d.pis}</option><option value="oni">${d.oni}</option>`;
         s.value = v;
     }
 
@@ -189,17 +171,7 @@
         const id = ++cardCount;
         const d = LANG_DATA[currentLang];
         const diet = document.getElementById('diet-select').value;
-        const html = `
-            <div class="dino-card" id="card-${id}" data-diet-lock="${diet}">
-                <button class="btn btn-r" onclick="this.parentElement.remove()">X</button>
-                <div class="display-result" id="res-${id}">${d.wait}</div>
-                <div class="grid-stats">
-                    <div class="box-stat"><span class="stat-label">${d.atk}</span><span class="val-stat" id="atk-${id}">--</span></div>
-                    <div class="box-stat"><span class="stat-label">${d.def}</span><span class="val-stat" id="def-${id}">--</span></div>
-                    <div class="box-stat"><span class="stat-label">${d.ene}</span><span class="val-stat" id="ene-${id}">--</span></div>
-                </div>
-                <button class="btn btn-p" onclick="spinOne(${id})">${d.spin}</button>
-            </div>`;
+        const html = `<div class="dino-card" id="card-${id}" data-diet-lock="${diet}"><button class="btn btn-r" onclick="this.parentElement.remove()">X</button><div class="display-result" id="res-${id}">${d.wait}</div><div class="grid-stats"><div class="box-stat"><span class="stat-label">${d.atk}</span><span class="val-stat" id="atk-${id}">--</span></div><div class="box-stat"><span class="stat-label">${d.def}</span><span class="val-stat" id="def-${id}">--</span></div><div class="box-stat"><span class="stat-label">${d.ene}</span><span class="val-stat" id="ene-${id}">--</span></div></div><button class="btn btn-p" onclick="spinOne(${id})">${d.spin}</button></div>`;
         document.getElementById('wrapper-list').insertAdjacentHTML('beforeend', html);
     }
 
@@ -211,7 +183,6 @@
         const dino = pool[Math.floor(Math.random()*pool.length)];
         let color = 'car';
         for(let [k, v] of Object.entries(DINOS)) if(v.includes(dino)) color = k;
-        
         document.getElementById(`res-${id}`).innerText = "...";
         setTimeout(() => {
             document.getElementById(`res-${id}`).innerText = "⭐ " + dino;
@@ -231,6 +202,7 @@
     document.getElementById('btn-add').onclick = addCard;
     document.getElementById('btn-del-all').onclick = () => { if(confirm(LANG_DATA[currentLang].confirm)) document.getElementById('wrapper-list').innerHTML = ""; };
     document.getElementById('btn-spin-all').onclick = () => { document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1])); };
+    window.onload = () => { updateDietSelect(); addCard(); };
 </script>
 </body>
 </html>
