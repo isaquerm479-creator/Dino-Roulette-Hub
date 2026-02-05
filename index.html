@@ -18,19 +18,19 @@
         }
 
         .hub-container { text-align: center; padding: 20px; width: 100%; max-width: 400px; animation: fadeIn 0.8s ease-out; }
-        h1 { font-size: 1.8rem; color: white; margin-bottom: 35px; letter-spacing: 3px; }
+        h1 { font-size: 1.8rem; color: white; margin-bottom: 35px; letter-spacing: 3px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
 
         .hub-card { 
             background: var(--c); border: 2px solid var(--p); border-radius: 15px; 
             padding: 22px; margin: 18px 0; cursor: pointer; display: block;
-            text-decoration: none; color: inherit; transition: all 0.3s ease;
+            text-decoration: none; color: inherit; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hub-card:hover { border-color: var(--a); transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 202, 40, 0.15); }
-        .hub-card h2 { margin: 0; color: var(--a); font-size: 1.25rem; text-transform: uppercase; }
-        .hub-card p { margin: 8px 0 0; font-size: 0.85rem; color: #888; }
+        .hub-card h2 { margin: 0; color: var(--a); font-size: 1.25rem; text-transform: uppercase; letter-spacing: 1px; }
+        .hub-card p { margin: 8px 0 0; font-size: 0.85rem; color: #888; font-weight: 500; }
 
-        .credits { margin-top: 50px; font-size: 0.75rem; color: #333; text-transform: uppercase; }
+        .credits { margin-top: 50px; font-size: 0.75rem; color: #333; letter-spacing: 1px; text-transform: uppercase; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
