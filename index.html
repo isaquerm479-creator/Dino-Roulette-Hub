@@ -5,99 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dino Genera Hub - Franchise</title>
     <style>
-        /* A "Fonte do Ouro": Variáveis de cor e estilo premium */
         :root { 
-            --p: #1b5e20; /* Verde Principal */
-            --d: #0a0a0a; /* Fundo Profundo */
-            --c: #1a1a1a; /* Card de Fundo */
-            --a: #ffca28; /* Ouro (Destaque) */
-            --t: #f0f0f0; /* Texto */
+            --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; 
+            --a: #ffca28; --t: #f0f0f0; 
         }
 
         body { 
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--d); 
-            color: var(--t); 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-            overflow: hidden;
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--d); color: var(--t); 
+            margin: 0; display: flex; align-items: center; 
+            justify-content: center; min-height: 100vh; overflow: hidden;
         }
 
-        .hub-container { 
-            text-align: center; 
-            padding: 20px; 
-            width: 100%; 
-            max-width: 400px; 
-            animation: fadeIn 0.8s ease-out;
-        }
+        .hub-container { text-align: center; padding: 20px; width: 100%; max-width: 400px; animation: fadeIn 0.8s ease-out; }
+        h1 { font-size: 1.8rem; color: white; margin-bottom: 35px; letter-spacing: 3px; }
 
-        h1 { 
-            font-size: 1.8rem;
-            color: white; 
-            margin-bottom: 35px; 
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Estilo dos Cards de Seleção */
         .hub-card { 
-            background: var(--c); 
-            border: 2px solid var(--p); 
-            border-radius: 15px; 
-            padding: 22px; 
-            margin: 18px 0; 
-            cursor: pointer; 
-            display: block;
-            text-decoration: none; 
-            color: inherit; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            background: var(--c); border: 2px solid var(--p); border-radius: 15px; 
+            padding: 22px; margin: 18px 0; cursor: pointer; display: block;
+            text-decoration: none; color: inherit; transition: all 0.3s ease;
         }
 
-        /* O efeito de brilho e ouro ao passar o mouse ou tocar */
-        .hub-card:hover { 
-            border-color: var(--a); 
-            transform: scale(1.03); 
-            box-shadow: 0 0 20px rgba(255, 202, 40, 0.15);
-        }
+        .hub-card:hover { border-color: var(--a); transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 202, 40, 0.15); }
+        .hub-card h2 { margin: 0; color: var(--a); font-size: 1.25rem; text-transform: uppercase; }
+        .hub-card p { margin: 8px 0 0; font-size: 0.85rem; color: #888; }
 
-        .hub-card h2 { 
-            margin: 0; 
-            color: var(--a); 
-            font-size: 1.25rem; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .hub-card p { 
-            margin: 8px 0 0; 
-            font-size: 0.85rem; 
-            color: #888; 
-            font-weight: 500;
-        }
-
-        .credits { 
-            margin-top: 50px; 
-            font-size: 0.75rem; 
-            color: #333; 
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Ajuste para Mobile */
-        @media (max-width: 480px) {
-            .hub-container { width: 90%; }
-            h1 { font-size: 1.5rem; }
-        }
+        .credits { margin-top: 50px; font-size: 0.75rem; color: #333; text-transform: uppercase; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -106,13 +40,13 @@
     <h1>DINO GENERA HUB</h1>
     
     <a href="jogo1.html" class="hub-card">
-        <h2>Jurassic Park OG</h2>
-        <p>Módulo: World 1 / Classic JP (Jogo 1)</p>
+        <h2>Jurassic Park 1</h2>
+        <p>Módulo: World 1 / The Origin (Jogo 1)</p>
     </a>
 
     <a href="jogo2.html" class="hub-card">
-        <h2>Jurassic World Evolution 1</h2>
-        <p>Módulo: World 2 / Classic JW (Jogo 2)</p>
+        <h2>Jurassic World Evolution 2</h2>
+        <p>Módulo: World 2 / Evolution (Jogo 2)</p>
     </a>
 
     <a href="jogo3.html" class="hub-card">
