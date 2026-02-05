@@ -45,10 +45,15 @@
         }
         .legend-item { display: flex; align-items: center; font-size: 0.75rem; margin-bottom: 4px; color: #bbb; }
         .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
-        .epic-desc { font-size: 0.7rem; color: #888; line-height: 1.3; margin: 0; }
 
         .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        
+        /* BOTÕES DE CONTROLE SUPERIOR */
+        .controls-box { 
+            background: #111; padding: 15px; border-radius: 15px; 
+            margin-bottom: 25px; border: 1px solid #222; width: 90%; max-width: 600px;
+        }
+        .top-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
         .dino-card { 
             background: var(--c); padding: 20px; border-radius: 15px; 
@@ -56,21 +61,18 @@
             transition: 0.4s; margin-bottom: 20px; 
         }
         
-        .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.2); }
-        .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.2); }
-        .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.2); }
-        .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.2); }
+        .card-car { border-color: #ff4444 !important; }
+        .card-her { border-color: #44ff44 !important; }
+        .card-pis { border-color: #4444ff !important; }
+        .card-oni { border-color: #ffaa44 !important; }
 
         .display-result { 
-            font-size: 1.4rem; color: var(--a); margin: 15px 0; 
+            font-size: 1.2rem; color: var(--a); margin: 15px 0; 
             font-weight: 900; text-align: center; text-transform: uppercase; min-height: 40px; 
         }
         
         .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .box-stat { 
-            background: #000; padding: 10px 2px; border-radius: 10px; 
-            text-align: center; border-bottom: 2px solid var(--p); 
-        }
+        .box-stat { background: #000; padding: 10px 2px; border-radius: 10px; text-align: center; }
         .stat-label { font-size: 0.6rem; color: #555; display: block; }
         .val-stat { color: #fff; font-weight: bold; font-size: 0.9rem; }
         .val-neg { color: #ff4444 !important; }
@@ -78,15 +80,16 @@
 
         .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-p { background: var(--p); color: white; padding: 12px; width: 100%; }
-        .btn-a { background: var(--a); color: black; padding: 12px 15px; box-shadow: 0 4px 0 #b8860b; }
-        .btn-clear { background: var(--r); color: white; padding: 12px 15px; }
-        .btn-r { background: #333; color: var(--r); padding: 5px 10px; position: absolute; top: 12px; right: 12px; border: 1px solid var(--r); }
+        .btn-a { background: var(--a); color: black; padding: 10px; font-size: 0.8rem; }
+        .btn-clear { background: var(--r); color: white; }
+        .btn-spin-all { background: #1565c0; color: white; grid-column: span 2; padding: 12px; }
+        .btn-r { background: #333; color: var(--r); padding: 5px 10px; position: absolute; top: 12px; right: 12px; }
         
         #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
         
         .side-item { margin-bottom: 20px; }
-        .side-item label { display: block; margin-bottom: 8px; font-weight: bold; color: #888; font-size: 0.75rem; text-transform: uppercase; }
-        select { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid var(--p); border-radius: 8px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: #888; }
+        select, input { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -100,7 +103,7 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="sidebar" id="sidebar">
-    <h3 id="txt-config-title" style="color:var(--a); margin-top:0;">Configurações</h3>
+    <h3 id="txt-config-title">Configurações</h3>
     
     <div class="side-item">
         <label id="lbl-lang">Idioma</label>
@@ -111,44 +114,50 @@
     </div>
 
     <div class="side-item">
-        <label id="lbl-epic">Modo Épico (Sorte)</label>
+        <label id="lbl-diet">Filtrar Dieta (Para novos cards)</label>
+        <select id="diet-filter">
+            <option value="all">Todas (Aleatório)</option>
+            <option value="car">Carnívoros</option>
+            <option value="her">Herbívoros</option>
+            <option value="pis">Piscívoros</option>
+            <option value="oni">Onívoros</option>
+        </select>
+    </div>
+
+    <div class="side-item">
+        <label id="lbl-epic">Modo Épico</label>
         <select id="epic-mode">
             <option value="off">OFF (Normal)</option>
             <option value="on">ON (Apenas Bônus 🍀)</option>
         </select>
     </div>
 
-    <div class="guide-section">
-        <span class="guide-title" id="tit-leg">Legenda de Cores</span>
-        <div class="legend-item"><div class="dot" style="background:#ff4444"></div> <span id="leg-car">Carnívoro</span></div>
-        <div class="legend-item"><div class="dot" style="background:#44ff44"></div> <span id="leg-her">Herbívoro</span></div>
-        <div class="legend-item"><div class="dot" style="background:#4444ff"></div> <span id="leg-pis">Piscívoro</span></div>
-        <div class="legend-item"><div class="dot" style="background:#ffaa44"></div> <span id="leg-oni">Onívoro</span></div>
-    </div>
-
-    <div class="guide-section">
-        <span class="guide-title" id="tit-epic">Sobre o Modo Épico</span>
-        <p class="epic-desc" id="desc-epic">Quando ativado, elimina as chances de vir atributos negativos (-100%, etc), garantindo apenas sorte positiva.</p>
-    </div>
-
     <button class="btn btn-p" onclick="location.href='index.html'" id="btn-back-hub" style="background:#b8860b; margin-bottom:10px;">Voltar ao Hub</button>
-    <button class="btn btn-p" onclick="toggleMenu()" id="btn-close-menu" style="background:#333;">Fechar Menu</button>
+    <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;">Fechar</button>
 </div>
 
 <div class="main-content">
-    <div class="top-btns">
-        <button class="btn btn-a" onclick="addCard()" id="btn-add">+ ADICIONAR</button>
-        <button class="btn btn-clear" onclick="clearAll()" id="btn-del-all">APAGAR TODOS</button>
+    <div class="controls-box">
+        <div style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
+            <label style="margin:0; white-space:nowrap;">Qtd:</label>
+            <input type="number" id="add-qty" value="1" min="1" max="20" style="width:60px;">
+            <button class="btn btn-a" onclick="multiAdd()" id="btn-add" style="flex:1;">+ ADICIONAR</button>
+        </div>
+        <div class="top-btns">
+            <button class="btn btn-spin-all" onclick="spinAll()" id="btn-spin-all">GIRAR TODOS</button>
+            <button class="btn btn-clear" onclick="clearAll()" id="btn-del-all">APAGAR TUDO</button>
+        </div>
     </div>
+    
     <div id="wrapper-list"></div>
 </div>
 
 <script>
     const DINOS = {
-        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus", "Majungasaurus", "Allosaurus", "Qianzhousaurus"],
-        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Amargasaurus", "Microceratus"],
-        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus", "Dimorphodon", "Kronosaurus"],
-        oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Archaeornithomimus"]
+        car: ["T-Rex", "Indominus Rex", "Giganotosaurus", "Velociraptor", "Atrociraptor", "Pyroraptor", "Carnotaurus"],
+        her: ["Triceratops", "Therizinosaurus", "Ankylosaurus", "Stegosaurus", "Brachiosaurus", "Diplodocus"],
+        pis: ["Mosasaurus", "Baryonyx", "Suchomimus", "Pteranodon", "Quetzalcoatlus"],
+        oni: ["Gallimimus", "Oviraptor", "Deinocheirus"]
     };
 
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
@@ -159,62 +168,31 @@
 
     const LANG_DATA = {
         pt: {
-            head: "DINO GENERA: JURASSIC WORLD 3", config: "Configurações", lang: "Idioma", epic: "Modo Épico (Sorte)",
-            wait: "AGUARDANDO...", add: "+ ADICIONAR", del: "APAGAR TODOS", spin: "GIRAR",
-            atk: "ATK", def: "DEF", ene: "ENE", titLeg: "Legenda de Cores", titEpic: "Sobre o Modo Épico",
-            descEpic: "Quando ativado, elimina as chances de vir atributos negativos, garantindo apenas sorte positiva.",
-            car: "Carnívoro", her: "Herbívoro", pis: "Piscívoro", oni: "Onívoro", back: "Voltar ao Hub", close: "Fechar Menu"
+            head: "DINO GENERA: JURASSIC WORLD 3", spinAll: "GIRAR TODOS", add: "+ ADICIONAR", del: "APAGAR TUDO",
+            wait: "AGUARDANDO...", spin: "GIRAR", atk: "ATK", def: "DEF", ene: "ENE"
         },
         en: {
-            head: "DINO GENERA: JURASSIC WORLD 3", config: "Settings", lang: "Language", epic: "Epic Mode (Luck)",
-            wait: "WAITING...", add: "+ ADD DINO", del: "DELETE ALL", spin: "SPIN",
-            atk: "ATK", def: "DEF", ene: "ENE", titLeg: "Color Legend", titEpic: "About Epic Mode",
-            descEpic: "When enabled, it removes the chance of negative attributes, ensuring only positive luck.",
-            car: "Carnivore", her: "Herbivore", pis: "Piscivore", oni: "Omnivore", back: "Back to Hub", close: "Close Menu"
+            head: "DINO GENERA: JW3", spinAll: "SPIN ALL", add: "+ ADD DINO", del: "CLEAR ALL",
+            wait: "WAITING...", spin: "SPIN", atk: "ATK", def: "DEF", ene: "ENE"
         }
     };
 
     function toggleMenu() {
-        const s = document.getElementById('sidebar');
-        const o = document.getElementById('overlay');
-        s.classList.toggle('open');
-        o.style.display = s.classList.contains('open') ? 'block' : 'none';
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
     }
 
-    function changeLang(l) {
-        currentLang = l;
-        const d = LANG_DATA[l];
-        document.getElementById('txt-head').innerText = d.head;
-        document.getElementById('txt-config-title').innerText = d.config;
-        document.getElementById('lbl-lang').innerText = d.lang;
-        document.getElementById('lbl-epic').innerText = d.epic;
-        document.getElementById('btn-add').innerText = d.add;
-        document.getElementById('btn-del-all').innerText = d.del;
-        document.getElementById('tit-leg').innerText = d.titLeg;
-        document.getElementById('tit-epic').innerText = d.titEpic;
-        document.getElementById('desc-epic').innerText = d.descEpic;
-        document.getElementById('leg-car').innerText = d.car;
-        document.getElementById('leg-her').innerText = d.her;
-        document.getElementById('leg-pis').innerText = d.pis;
-        document.getElementById('leg-oni').innerText = d.oni;
-        document.getElementById('btn-back-hub').innerText = d.back;
-        document.getElementById('btn-close-menu').innerText = d.close;
-
-        document.querySelectorAll('.display-result').forEach(el => {
-            if(el.innerText === "AGUARDANDO..." || el.innerText === "WAITING...") el.innerText = d.wait;
-        });
-        document.querySelectorAll('.stat-label').forEach((el, i) => {
-            const keys = [d.atk, d.def, d.ene];
-            el.innerText = keys[i % 3];
-        });
-        document.querySelectorAll('.btn-spin-manual').forEach(el => el.innerText = d.spin);
+    function multiAdd() {
+        const qty = document.getElementById('add-qty').value;
+        for(let i=0; i<qty; i++) addCard();
     }
 
     function addCard() {
         cardCount++;
         const d = LANG_DATA[currentLang];
+        const diet = document.getElementById('diet-filter').value;
         const html = `
-            <div class="dino-card" id="card-${cardCount}">
+            <div class="dino-card" id="card-${cardCount}" data-diet="${diet}">
                 <button class="btn btn-r" onclick="document.getElementById('card-${cardCount}').remove()">X</button>
                 <div class="display-result" id="res-${cardCount}">${d.wait}</div>
                 <div class="grid-stats">
@@ -228,28 +206,54 @@
     }
 
     function spin(id) {
+        const cardEl = document.getElementById(`card-${id}`);
+        const dietFilter = cardEl.getAttribute('data-diet');
         const isEpic = document.getElementById('epic-mode').value === 'on';
-        const allDinos = [].concat(...Object.values(DINOS));
-        const chosen = allDinos[Math.floor(Math.random() * allDinos.length)];
         
+        let pool = [];
+        if(dietFilter === 'all') {
+            pool = [].concat(...Object.values(DINOS));
+        } else {
+            pool = DINOS[dietFilter];
+        }
+
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+        
+        // Descobrir o tipo para a cor
         let type = 'car';
         for(let t in DINOS) if(DINOS[t].includes(chosen)) type = t;
 
-        const card = document.getElementById(`card-${id}`);
-        card.className = `dino-card card-${type}`;
-        
+        cardEl.className = `dino-card card-${type}`;
         document.getElementById(`res-${id}`).innerText = "⭐ " + chosen;
 
-        const pool = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
+        const chances = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
         ['atk', 'def', 'ene'].forEach(stat => {
-            const val = pool[Math.floor(Math.random() * pool.length)];
+            const val = chances[Math.floor(Math.random() * chances.length)];
             const el = document.getElementById(`${stat}-${id}`);
             el.innerText = val;
             el.className = 'val-stat ' + (val.includes('-') ? 'val-neg' : (val === '0%' ? '' : 'val-pos'));
         });
     }
 
+    function spinAll() {
+        const cards = document.querySelectorAll('.dino-card');
+        cards.forEach(card => {
+            const id = card.id.split('-')[1];
+            spin(id);
+        });
+    }
+
     function clearAll() { document.getElementById('wrapper-list').innerHTML = ""; }
+    
+    function changeLang(l) {
+        currentLang = l;
+        const d = LANG_DATA[l];
+        document.getElementById('txt-head').innerText = d.head;
+        document.getElementById('btn-spin-all').innerText = d.spinAll;
+        document.getElementById('btn-add').innerText = d.add;
+        document.getElementById('btn-del-all').innerText = d.del;
+    }
+
     addCard();
 </script>
 </body>
