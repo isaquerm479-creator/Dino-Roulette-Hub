@@ -7,64 +7,43 @@
     <style>
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
         body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
-        
         header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
         .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--a); }
-        
-        .sidebar { 
-            position: fixed; left: -320px; top: 0; width: 280px; height: 100%; 
-            background: var(--c); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            padding: 25px; border-right: 2px solid var(--p); box-shadow: 10px 0 20px rgba(0,0,0,0.8);
-            display: flex; flex-direction: column; overflow-y: auto;
-        }
+        .sidebar { position: fixed; left: -320px; top: 0; width: 280px; height: 100%; background: var(--c); z-index: 2000; transition: transform 0.4s; padding: 25px; border-right: 2px solid var(--p); display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box;}
         .sidebar.open { transform: translateX(320px); }
-
         .side-item { margin-bottom: 20px; }
         .side-item label { display: block; margin-bottom: 8px; font-weight: bold; color: #888; font-size: 0.75rem; text-transform: uppercase; }
         select, input { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid var(--p); border-radius: 8px; outline: none; }
-
         .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; z-index:1500; backdrop-filter: blur(3px); }
-
-        /* MODAL HISTÓRICO */
         .history-modal { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--d); z-index:3000; display:none; flex-direction: column; padding: 20px; box-sizing: border-box; }
         .history-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); padding-bottom: 10px; margin-bottom: 20px; }
         #history-content { overflow-y: auto; flex-grow: 1; }
         .hist-card { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid var(--a); }
-
-        /* LEGENDA E EXPLICAÇÕES */
         .guide-section { background: #111; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
         .guide-title { font-size: 0.7rem; color: var(--a); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; }
         .legend-item { display: flex; align-items: center; font-size: 0.75rem; margin-bottom: 4px; color: #bbb; }
         .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
         .epic-desc { font-size: 0.7rem; color: #888; line-height: 1.3; }
-
         .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
-        #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
-
-        /* CARDS */
-        .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; transition: 0.5s ease; }
+        .dino-card { background: var(--c); padding: 20px; border-radius: 15px; border: 2px solid #333; width: 280px; position: relative; transition: 0.5s ease; margin-bottom: 20px; }
         .card-car { border-color: #ff4444 !important; box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
         .card-her { border-color: #44ff44 !important; box-shadow: 0 0 15px rgba(68, 255, 68, 0.3); }
         .card-pis { border-color: #4444ff !important; box-shadow: 0 0 15px rgba(68, 68, 255, 0.3); }
         .card-oni { border-color: #ffaa44 !important; box-shadow: 0 0 15px rgba(255, 170, 68, 0.3); }
-
         .display-result { font-size: 1.4rem; color: var(--a); margin: 15px 0; font-weight: 900; text-align: center; text-transform: uppercase; min-height: 40px; }
-        
         .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
         .box-stat { background: #000; padding: 10px 2px; border-radius: 10px; text-align: center; border-bottom: 2px solid var(--p); }
+        .stat-label { font-size: 0.6rem; color: #555; display: block; }
         .val-stat { color: #fff; font-weight: bold; font-size: 0.9rem; }
         .val-neg { color: #ff4444 !important; }
         .val-pos { color: #44ff44 !important; }
-
         .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .btn-p { background: var(--p); color: white; padding: 12px; width: 100%; }
         .btn-a { background: var(--a); color: black; padding: 12px 15px; box-shadow: 0 4px 0 #b8860b; }
         .btn-clear { background: var(--r); color: white; padding: 12px 15px; box-shadow: 0 4px 0 #8b1a1a; }
-        .btn-hist { background: #444; color: white; padding: 12px 15px; }
         .btn-r { background: #333; color: var(--r); padding: 5px 10px; position: absolute; top: 12px; right: 12px; border: 1px solid var(--r); }
-        
-        .signature { margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; font-size: 0.7rem; color: #555; }
+        #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
     </style>
 </head>
 <body>
@@ -73,40 +52,40 @@
 
 <div class="history-modal" id="history-modal">
     <div class="history-header">
-        <h2 style="margin:0; color:var(--a);">HISTÓRICO COMPLETO</h2>
-        <button class="btn btn-clear" onclick="toggleHistory()">FECHAR</button>
+        <h2 id="hist-title" style="margin:0; color:var(--a);">HISTÓRICO COMPLETO</h2>
+        <button class="btn btn-clear" id="btn-close-hist" onclick="toggleHistory()">FECHAR</button>
     </div>
     <div id="history-content"></div>
 </div>
 
 <div class="sidebar" id="sidebar">
-    <h3 id="txt-opts" style="color:var(--a); margin-top:0;">Configurações</h3>
+    <h3 id="txt-config-title" style="color:var(--a); margin-top:0;">Configurações</h3>
     
     <div class="side-item">
-        <label>IDIOMA</label>
+        <label id="lbl-lang">Idioma</label>
         <select onchange="changeLang(this.value)"><option value="pt">Português</option><option value="en">English</option></select>
     </div>
 
     <div class="side-item">
-        <label id="txt-epic-lbl">MODO ÉPICO</label>
-        <select id="epic-mode" onchange="updateEpicInfo()"><option value="off">OFF</option><option value="on">ON (🍀)</option></select>
+        <label id="lbl-epic">Modo Épico</label>
+        <select id="epic-mode"><option value="off">OFF</option><option value="on">ON (🍀)</option></select>
     </div>
 
     <div class="side-item">
-        <label>DIETA PADRÃO</label>
+        <label id="lbl-diet">Dieta Padrão</label>
         <select id="diet-select"></select>
     </div>
 
     <div class="side-item">
-        <label>GERAR EM LOTE</label>
+        <label id="lbl-batch">Gerar em Lote</label>
         <input type="number" id="batch-qty" value="1" min="1" max="100">
-        <button class="btn btn-p" style="margin-top:10px" onclick="batchAdd()">Gerar Agora</button>
+        <button class="btn btn-p" style="margin-top:10px" id="btn-batch" onclick="batchAdd()">Gerar Agora</button>
     </div>
 
-    <button class="btn btn-hist" style="width:100%; margin-bottom:15px" onclick="toggleHistory()">Ver Histórico</button>
+    <button class="btn btn-p" style="background:#444; margin-bottom:15px" id="btn-view-hist" onclick="toggleHistory()">Ver Histórico</button>
 
     <div class="guide-section">
-        <span class="guide-title">Legenda de Cores</span>
+        <span class="guide-title" id="tit-leg">Legenda de Cores</span>
         <div class="legend-item"><div class="dot" style="background:#ff4444"></div> <span id="leg-car">Carnívoro</span></div>
         <div class="legend-item"><div class="dot" style="background:#44ff44"></div> <span id="leg-her">Herbívoro</span></div>
         <div class="legend-item"><div class="dot" style="background:#4444ff"></div> <span id="leg-pis">Piscívoro</span></div>
@@ -114,16 +93,11 @@
     </div>
 
     <div class="guide-section">
-        <span class="guide-title">Sobre o Modo Épico</span>
-        <p class="epic-desc" id="epic-desc">Ative para garantir apenas atributos positivos (0% a 100%). Desative para incluir desafios negativos (-100% a 0%).</p>
+        <span class="guide-title" id="tit-epic">Sobre o Modo Épico</span>
+        <p class="epic-desc" id="desc-epic">Ative para garantir atributos positivos. Desative para incluir desafios negativos.</p>
     </div>
 
-    <button class="btn btn-p" onclick="toggleMenu()" style="background:#333; margin-top: 10px;" id="txt-close-btn">Fechar Menu</button>
-
-    <div class="signature">
-        <span>Isaac criou esta roleta.</span><br>
-        <span style="font-style: italic; opacity: 0.6;">Isaac created this roulette.</span>
-    </div>
+    <button class="btn btn-p" onclick="toggleMenu()" style="background:#333;" id="btn-close-menu">Fechar Menu</button>
 </div>
 
 <header>
@@ -134,54 +108,93 @@
 
 <div class="main-content">
     <div class="top-btns">
-        <button class="btn btn-a" onclick="addCard()">+ ADICIONAR</button>
-        <button class="btn btn-clear" onclick="clearAll()">APAGAR TODOS</button>
-        <button class="btn btn-p" style="width:auto; padding:0 20px;" onclick="spinAll()">GIRAR TODOS</button>
+        <button class="btn btn-a" id="btn-add">+ ADICIONAR</button>
+        <button class="btn btn-clear" id="btn-del-all">APAGAR TODOS</button>
+        <button class="btn btn-p" style="width:auto; padding:0 20px;" id="btn-spin-all">GIRAR TODOS</button>
     </div>
     <div id="wrapper-list"></div>
 </div>
 
 <script>
     const DINOS = {
-        car: ["T-Rex", "Velociraptor", "Carnotaurus", "Allosaurus", "Spinosaurus", "Ceratosaurus", "Giganotosaurus"],
-        her: ["Triceratops", "Stegosaurus", "Brachiosaurus", "Diplodocus", "Ankylosaurus", "Parasaurolophus"],
-        pis: ["Baryonyx", "Suchomimus", "Pteranodon", "Mosasaurus", "Plesiosaurus"],
-        oni: ["Gallimimus", "Oviraptor", "Deinocheirus", "Therizinosaurus"]
+        car: ["T-Rex", "Velociraptor", "Carnotaurus", "Allosaurus", "Spinosaurus"],
+        her: ["Triceratops", "Stegosaurus", "Brachiosaurus", "Ankylosaurus", "Diplodocus"],
+        pis: ["Baryonyx", "Suchomimus", "Pteranodon", "Mosasaurus"],
+        oni: ["Gallimimus", "Oviraptor", "Deinocheirus"]
     };
     
     const CHANCES_NORMAL = ["-100%", "-75%", "-50%", "-25%", "0%", "25%", "50%", "75%", "100%"];
     const CHANCES_EPIC = ["0%", "25%", "50%", "75%", "100%"];
-    
-    let cardCount = 0;
     let currentLang = 'pt';
+    let cardCount = 0;
 
-    function updateDietSelect() {
-        const s = document.getElementById('diet-select');
-        const labels = currentLang === 'pt' ? ["Todos", "Carnívoros", "Herbívoros", "Piscívoros", "Onívoros"] : ["All", "Carnivores", "Herbivores", "Piscivores", "Omnivores"];
-        const keys = ["all", "car", "her", "pis", "oni"];
-        s.innerHTML = keys.map((k, i) => `<option value="${k}">${labels[i]}</option>`).join('');
-    }
+    const LANG_DATA = {
+        pt: {
+            head: "DINO GENERA", config: "Configurações", lang: "Idioma", epic: "Modo Épico", diet: "Dieta Padrão", batch: "Gerar em Lote",
+            btnBatch: "Gerar Agora", btnHist: "Ver Histórico", titLeg: "Legenda de Cores", car: "Carnívoro", her: "Herbívoro",
+            pis: "Piscívoro", oni: "Onívoro", titEpic: "Sobre o Modo Épico", descEpic: "Ative para garantir atributos positivos. Desative para incluir desafios negativos.",
+            btnClose: "Fechar Menu", add: "+ ADICIONAR", del: "APAGAR TODOS", spinAll: "GIRAR TODOS", spin: "GIRAR",
+            histTitle: "HISTÓRICO COMPLETO", histClose: "FECHAR", atk: "ATK", def: "DEF", ene: "ENE", wait: "AGUARDANDO...",
+            confirm: "Apagar todos os dinossauros?"
+        },
+        en: {
+            head: "DINO GENERATOR", config: "Settings", lang: "Language", epic: "Epic Mode", diet: "Default Diet", batch: "Batch Generate",
+            btnBatch: "Generate Now", btnHist: "View History", titLeg: "Color Legend", car: "Carnivore", her: "Herbivore",
+            pis: "Piscivore", oni: "Omnivore", titEpic: "About Epic Mode", descEpic: "Enable for positive attributes only. Disable for negative challenges.",
+            btnClose: "Close Menu", add: "+ ADD DINO", del: "DELETE ALL", spinAll: "SPIN ALL", spin: "SPIN",
+            histTitle: "FULL HISTORY", histClose: "CLOSE", atk: "ATK", def: "DEF", ene: "ENE", wait: "WAITING...",
+            confirm: "Delete all dinosaurs?"
+        }
+    };
 
     function changeLang(l) {
         currentLang = l;
+        const d = LANG_DATA[l];
+        document.getElementById('txt-head').innerText = d.head;
+        document.getElementById('txt-config-title').innerText = d.config;
+        document.getElementById('lbl-lang').innerText = d.lang;
+        document.getElementById('lbl-epic').innerText = d.epic;
+        document.getElementById('lbl-diet').innerText = d.diet;
+        document.getElementById('lbl-batch').innerText = d.batch;
+        document.getElementById('btn-batch').innerText = d.btnBatch;
+        document.getElementById('btn-view-hist').innerText = d.btnHist;
+        document.getElementById('tit-leg').innerText = d.titLeg;
+        document.getElementById('leg-car').innerText = d.car;
+        document.getElementById('leg-her').innerText = d.her;
+        document.getElementById('leg-pis').innerText = d.pis;
+        document.getElementById('leg-oni').innerText = d.oni;
+        document.getElementById('tit-epic').innerText = d.titEpic;
+        document.getElementById('desc-epic').innerText = d.descEpic;
+        document.getElementById('btn-close-menu').innerText = d.btnClose;
+        document.getElementById('btn-add').innerText = d.add;
+        document.getElementById('btn-del-all').innerText = d.del;
+        document.getElementById('btn-spin-all').innerText = d.spinAll;
+        document.getElementById('hist-title').innerText = d.histTitle;
+        document.getElementById('btn-close-hist').innerText = d.histClose;
+
         updateDietSelect();
-        const isPt = l === 'pt';
-        document.getElementById('txt-head').innerText = isPt ? 'DINO GENERA' : 'DINO GENERATOR';
-        document.getElementById('txt-close-btn').innerText = isPt ? 'Fechar Menu' : 'Close Menu';
-        document.getElementById('leg-car').innerText = isPt ? 'Carnívoro' : 'Carnivore';
-        document.getElementById('leg-her').innerText = isPt ? 'Herbívoro' : 'Herbivore';
-        document.getElementById('leg-pis').innerText = isPt ? 'Piscívoro' : 'Piscivore';
-        document.getElementById('leg-oni').innerText = isPt ? 'Onívoro' : 'Omnivore';
-        document.getElementById('epic-desc').innerText = isPt ? 
-            "Ative para garantir apenas atributos positivos (0% a 100%). Desative para incluir desafios negativos (-100% a 0%)." : 
-            "Enable to guarantee only positive attributes (0% to 100%). Disable to include negative challenges (-100% to 0%).";
+        // Atualiza cards existentes
+        document.querySelectorAll('.btn-p-card').forEach(b => b.innerText = d.spin);
+        document.querySelectorAll('.atk-lbl').forEach(l => l.innerText = d.atk);
+        document.querySelectorAll('.def-lbl').forEach(l => l.innerText = d.def);
+        document.querySelectorAll('.ene-lbl').forEach(l => l.innerText = d.ene);
+    }
+
+    function updateDietSelect() {
+        const s = document.getElementById('diet-select');
+        const v = s.value || 'all';
+        const d = LANG_DATA[currentLang];
+        const labels = [d.car, d.her, d.pis, d.oni];
+        const keys = ["car", "her", "pis", "oni"];
+        s.innerHTML = `<option value="all">${currentLang === 'pt' ? 'Todos' : 'All'}</option>` + 
+                      keys.map((k, i) => `<option value="${k}">${labels[i]}</option>`).join('');
+        s.value = v;
     }
 
     function toggleMenu() {
         const s = document.getElementById('sidebar');
-        const o = document.getElementById('overlay');
         s.classList.toggle('open');
-        o.style.display = s.classList.contains('open') ? 'block' : 'none';
+        document.getElementById('overlay').style.display = s.classList.contains('open') ? 'block' : 'none';
     }
 
     function toggleHistory() {
@@ -189,20 +202,20 @@
         m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    function addCard(txt = null) {
-        cardCount++;
+    function addCard() {
+        const id = ++cardCount;
+        const d = LANG_DATA[currentLang];
         const diet = document.getElementById('diet-select').value;
-        const label = txt || (currentLang === 'pt' ? 'AGUARDANDO...' : 'WAITING...');
         const html = `
-            <div class="dino-card" id="card-${cardCount}" data-diet-lock="${diet}">
-                <button class="btn btn-r" onclick="document.getElementById('card-${cardCount}').remove()">X</button>
-                <div class="display-result" id="res-${cardCount}">${label}</div>
+            <div class="dino-card" id="card-${id}" data-diet-lock="${diet}">
+                <button class="btn btn-r" onclick="this.parentElement.remove()">X</button>
+                <div class="display-result" id="res-${id}">${d.wait}</div>
                 <div class="grid-stats">
-                    <div class="box-stat"><span>ATK</span><br><span class="val-stat" id="atk-${cardCount}">--</span></div>
-                    <div class="box-stat"><span>DEF</span><br><span class="val-stat" id="def-${cardCount}">--</span></div>
-                    <div class="box-stat"><span>ENE</span><br><span class="val-stat" id="ene-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label atk-lbl">${d.atk}</span><span class="val-stat" id="atk-${id}">--</span></div>
+                    <div class="box-stat"><span class="stat-label def-lbl">${d.def}</span><span class="val-stat" id="def-${id}">--</span></div>
+                    <div class="box-stat"><span class="stat-label ene-lbl">${d.ene}</span><span class="val-stat" id="ene-${id}">--</span></div>
                 </div>
-                <button class="btn btn-p" onclick="spinOne(${cardCount})">${currentLang === 'pt' ? 'GIRAR' : 'SPIN'}</button>
+                <button class="btn btn-p btn-p-card" onclick="spinOne(${id})">${d.spin}</button>
             </div>`;
         document.getElementById('wrapper-list').insertAdjacentHTML('beforeend', html);
     }
@@ -211,68 +224,36 @@
         const card = document.getElementById(`card-${id}`);
         const dietLock = card.getAttribute('data-diet-lock');
         const isEpic = document.getElementById('epic-mode').value === 'on';
-        
         let pool = dietLock === 'all' ? [].concat(...Object.values(DINOS)) : DINOS[dietLock];
-        const finalDino = pool[Math.floor(Math.random()*pool.length)];
-        
-        let detectedDiet = 'all';
-        for(let [key, list] of Object.entries(DINOS)) {
-            if(list.includes(finalDino)) detectedDiet = key;
-        }
-
-        const resTxt = document.getElementById(`res-${id}`);
-        resTxt.innerText = "...";
-        
+        const dino = pool[Math.floor(Math.random()*pool.length)];
+        let color = 'all';
+        for(let [k, v] of Object.entries(DINOS)) if(v.includes(dino)) color = k;
+        document.getElementById(`res-${id}`).innerText = "...";
         setTimeout(() => {
-            resTxt.innerText = "⭐ " + finalDino;
-            card.className = `dino-card card-${detectedDiet}`;
-            
-            const stats = [`atk-${id}`, `def-${id}`, `ene-${id}`];
-            const poolValues = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
-            let finalStats = [];
-
-            stats.forEach(sid => {
-                let opts = [...poolValues];
-                if(Math.random() > 0.05) opts = opts.filter(v => v !== "100%" && v !== "-100%");
-                
+            document.getElementById(`res-${id}`).innerText = "⭐ " + dino;
+            card.className = `dino-card card-${color}`;
+            const poolVals = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
+            const resStats = [];
+            ['atk','def','ene'].forEach(s => {
+                let opts = [...poolVals];
+                if(Math.random() > 0.08) opts = opts.filter(v => v !== "100%" && v !== "-100%");
                 const val = opts[Math.floor(Math.random()*opts.length)];
-                finalStats.push(val);
-                const el = document.getElementById(sid);
+                resStats.push(val);
+                const el = document.getElementById(`${s}-${id}`);
                 el.innerText = val;
                 el.className = 'val-stat ' + (val.includes('-') ? 'val-neg' : (val === '0%' ? '' : 'val-pos'));
             });
-
-            saveHistory(finalDino, finalStats);
+            document.getElementById('history-content').insertAdjacentHTML('afterbegin', `<div class="hist-card"><b>${dino}</b><br><small>ATK:${resStats[0]} DEF:${resStats[1]} ENE:${resStats[2]}</small></div>`);
         }, 400);
     }
 
-    function saveHistory(name, stats) {
-        const content = document.getElementById('history-content');
-        const html = `
-            <div class="hist-card">
-                <b style="color:var(--a)">${name}</b><br>
-                <small>ATK: ${stats[0]} | DEF: ${stats[1]} | ENE: ${stats[2]}</small>
-            </div>`;
-        content.insertAdjacentHTML('afterbegin', html);
-    }
+    function clearAll() { if(confirm(LANG_DATA[currentLang].confirm)) document.getElementById('wrapper-list').innerHTML = ""; }
+    function batchAdd() { const q = document.getElementById('batch-qty').value; for(let i=0; i<q; i++) addCard(); toggleMenu(); }
+    function spinAll() { document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1])); }
 
-    function clearAll() {
-        if(confirm(currentLang === 'pt' ? "Apagar todos os dinossauros?" : "Delete all dinosaurs?")) {
-            document.getElementById('wrapper-list').innerHTML = "";
-            cardCount = 0;
-        }
-    }
-
-    function batchAdd() {
-        const q = document.getElementById('batch-qty').value;
-        const label = currentLang === 'pt' ? 'AGUARDANDO...' : 'WAITING...';
-        for(let i=0; i<q; i++) addCard(label);
-        toggleMenu();
-    }
-
-    function spinAll() {
-        document.querySelectorAll('.dino-card').forEach(c => spinOne(c.id.split('-')[1]));
-    }
+    document.getElementById('btn-add').onclick = addCard;
+    document.getElementById('btn-del-all').onclick = clearAll;
+    document.getElementById('btn-spin-all').onclick = spinAll;
 
     window.onload = () => { updateDietSelect(); addCard(); };
 </script>
