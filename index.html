@@ -3,147 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genera Dino - Desktop & Mobile</title>
+    <title>Dino Genera Ultra</title>
     <style>
         :root { --p: #1b5e20; --d: #0a0a0a; --c: #1a1a1a; --a: #ffca28; --t: #f0f0f0; --r: #c62828; }
-        body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { font-family: -apple-system, sans-serif; background: var(--d); color: var(--t); margin: 0; padding: 0; overflow-x: hidden; }
         
-        header { background: var(--p); width: 100%; padding: 15px 0; text-align: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 99; }
+        /* HEADER & MENU */
+        header { background: var(--p); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000; }
+        .menu-icon { font-size: 1.5rem; cursor: pointer; padding: 5px; }
         
-        /* CONTAINER PRINCIPAL */
-        .main-container { width: 95%; max-width: 1200px; padding: 20px 0; text-align: center; }
+        /* SIDEBAR */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 250px; height: 100%; background: var(--c); z-index: 2000; transition: 0.3s; padding: 20px; border-right: 2px solid var(--p); box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .sidebar.open { left: 0; }
+        .sidebar h3 { color: var(--a); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .side-item { margin-bottom: 20px; }
+        select, input { width: 100%; padding: 8px; background: #222; color: white; border: 1px solid var(--p); border-radius: 5px; }
 
-        /* LISTA QUE MUDA CONFORME A TELA */
-        #wrapper-list { 
-            display: flex; 
-            flex-wrap: wrap; /* Faz pular linha no PC */
-            gap: 20px; 
-            justify-content: center; /* Centraliza no PC */
-            margin-top: 20px;
-        }
+        /* LAYOUT */
+        .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .top-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        #wrapper-list { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; width: 100%; }
 
-        /* CARD DO DINOSSAURO */
-        .dino-card { 
-            background: var(--c); 
-            padding: 15px; 
-            border-radius: 15px; 
-            border: 1px solid #333; 
-            text-align: center; 
-            position: relative;
-            flex: 0 0 100%; /* No celular ocupa tudo */
-            max-width: 350px; /* Largura máxima para não ficar gigante */
-            box-sizing: border-box;
-        }
-
-        /* AJUSTE PARA COMPUTADOR (Telas maiores que 768px) */
-        @media (min-width: 768px) {
-            .dino-card {
-                flex: 0 0 calc(33.33% - 20px); /* 3 por linha no PC */
-                min-width: 300px;
-            }
-        }
-
-        .btn-universal { background: var(--p); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1rem; }
-        .btn-add-new { background: var(--a); color: #000; margin-bottom: 10px; padding: 18px; font-size: 1.1rem; max-width: 400px; }
+        /* CARDS */
+        .dino-card { background: var(--c); padding: 15px; border-radius: 12px; border: 1px solid #333; width: 280px; position: relative; transition: 0.2s; }
+        .dino-card:hover { border-color: var(--p); }
+        .display-result { font-size: 1.3rem; color: var(--a); margin: 10px 0; font-weight: bold; min-height: 35px; text-align: center; }
         
-        .display-result { font-size: 1.5rem; color: var(--a); margin: 12px 0; font-weight: 800; text-transform: uppercase; min-height: 40px; }
-        
-        .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .box-stat { background: #222; padding: 10px 2px; border-radius: 8px; border-bottom: 3px solid var(--p); }
-        .label-stat { font-size: 0.65rem; color: #aaa; display: block; }
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
+        .box-stat { background: #222; padding: 8px 2px; border-radius: 6px; text-align: center; border-bottom: 2px solid var(--p); }
+        .label-stat { font-size: 0.6rem; color: #888; display: block; }
         .val-stat { color: var(--a); font-weight: bold; font-size: 0.9rem; }
         
-        .remove-trigger { background: var(--r); color: white; border: none; padding: 5px 12px; border-radius: 5px; font-size: 0.7rem; position: absolute; top: 10px; right: 10px; cursor: pointer; }
-        
-        footer { padding: 25px; text-align: center; font-size: 0.8rem; color: #666; width: 100%; background: #000; margin-top: auto; }
+        /* BUTTONS */
+        .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-p { background: var(--p); color: white; padding: 10px; width: 100%; }
+        .btn-a { background: var(--a); color: black; padding: 12px 20px; }
+        .btn-r { background: var(--r); color: white; padding: 4px 8px; font-size: 0.7rem; position: absolute; top: 10px; right: 10px; }
+        .btn-all { background: #2e7d32; color: white; padding: 12px 25px; }
+
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; z-index:1500; }
     </style>
 </head>
 <body>
 
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="sidebar" id="sidebar">
+    <h3 id="txt-opts">Opções</h3>
+    <div class="side-item">
+        <label id="txt-lang">Idioma:</label>
+        <select onchange="changeLang(this.value)">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+    <div class="side-item">
+        <label id="txt-diet">Filtrar Dieta:</label>
+        <select id="diet-select">
+            <option value="all">Todos</option>
+            <option value="car">Carnívoros</option>
+            <option value="her">Herbívoros</option>
+            <option value="pis">Piscívoros</option>
+            <option value="oni">Onívoros</option>
+        </select>
+    </div>
+    <div class="side-item">
+        <label id="txt-batch">Gerar Vários (Qtd):</label>
+        <input type="number" id="batch-qty" value="1" min="1" max="20">
+        <button class="btn btn-p" style="margin-top:5px" onclick="batchAdd()" id="txt-gen-btn">Gerar</button>
+    </div>
+    <button class="btn btn-p" onclick="toggleMenu()">Fechar</button>
+</div>
+
 <header>
-    <b id="head-title">GENERA - DINOSAUR HUB</b>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <b id="txt-head">DINO GENERA HUB</b>
+    <div style="width: 30px"></div>
 </header>
 
-<div class="main-container">
-    <button class="btn-universal btn-add-new" onclick="addDinoBox()">+ ADICIONAR NOVA CRIATURA</button>
+<div class="main-content">
+    <div class="top-btns">
+        <button class="btn btn-a" onclick="addCard()" id="txt-add-btn">+ Adicionar</button>
+        <button class="btn btn-all" onclick="spinAll()" id="txt-spin-all">GIRAR TODOS</button>
+    </div>
+    
     <div id="wrapper-list"></div>
 </div>
 
-<footer>
-    <div style="color:var(--a)">Isaque criou este jogo espero que goste</div>
-    <div style="font-style: italic; opacity: 0.5;">Isaque created this game hope you like it</div>
-</footer>
-
 <script>
-    const DINO_POOL = ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus", "Stegosaurus", "Triceratops", "Ceratosaurus", "Baryonyx", "Carnotaurus"];
-    const CHANCE_POOL = ["0%", "25%", "50%", "75%", "100%"];
-    let globalCounter = 0;
+    const DINOS = {
+        car: ["T-Rex", "Velociraptor", "Carnotaurus", "Allosaurus", "Giganotosaurus", "Ceratosaurus"],
+        her: ["Triceratops", "Stegosaurus", "Ankylosaurus", "Brachiosaurus", "Diplodocus", "Parasaurolophus"],
+        pis: ["Spinosaurus", "Baryonyx", "Suchomimus", "Pteranodon"],
+        oni: ["Gallimimus", "Oviraptor", "Therizinosaurus"]
+    };
+    const CHANCES = ["0%", "25%", "50%", "75%", "100%"];
+    let cardCount = 0;
+    let currentLang = 'pt';
 
-    function addDinoBox() {
-        globalCounter++;
-        const container = document.getElementById('wrapper-list');
-        const id = globalCounter;
-        
-        const card = document.createElement('div');
-        card.className = 'dino-card';
-        card.id = `box-${id}`;
-        
-        card.innerHTML = `
-            <button class="remove-trigger" onclick="document.getElementById('box-${id}').remove()">REMOVER</button>
-            <div style="font-size: 0.7rem; color: #555; text-align: left;">CRIATURA #${id}</div>
-            <div class="display-result" id="dino-res-${id}">AGUARDANDO...</div>
-            
-            <div class="grid-stats">
-                <div class="box-stat"><span class="label-stat">ATK</span><span class="val-stat" id="atk-${id}">--</span></div>
-                <div class="box-stat"><span class="label-stat">DEF</span><span class="val-stat" id="def-${id}">--</span></div>
-                <div class="box-stat"><span class="label-stat">ENE</span><span class="val-stat" id="ene-${id}">--</span></div>
-            </div>
-            
-            <button class="btn-universal" onclick="triggerSpin(${id})">GERAR TUDO</button>
-        `;
-        
-        container.appendChild(card); // Usa appendChild para colocar no final (da esquerda para direita)
+    const T = {
+        pt: { opts: "Configurações", lang: "Idioma:", diet: "Dieta:", batch: "Qtd. Inicial:", genBtn: "Gerar", head: "DINO HUB", addBtn: "+ Novo Dino", spinAll: "GIRAR TODOS", girar: "GIRAR", remover: "X", atk: "ATK", def: "DEF", ene: "ENE" },
+        en: { opts: "Settings", lang: "Language:", diet: "Diet:", batch: "Batch Qty:", genBtn: "Generate", head: "DINO HUB", addBtn: "+ New Dino", spinAll: "SPIN ALL", girar: "SPIN", remover: "X", atk: "ATK", def: "DEF", ene: "ENE" }
+    };
+
+    function toggleMenu() {
+        const s = document.getElementById('sidebar');
+        const o = document.getElementById('overlay');
+        s.classList.toggle('open');
+        o.style.display = s.classList.contains('open') ? 'block' : 'none';
     }
 
-    function triggerSpin(id) {
-        const dinoText = document.getElementById(`dino-res-${id}`);
-        let count = 0;
-        const timerDino = setInterval(() => {
-            dinoText.innerText = DINO_POOL[Math.floor(Math.random() * DINO_POOL.length)];
-            if(count++ > 12) {
-                clearInterval(timerDino);
-                dinoText.innerText = "⭐ " + dinoText.innerText + " ⭐";
-            }
+    function changeLang(l) {
+        currentLang = l;
+        document.getElementById('txt-opts').innerText = T[l].opts;
+        document.getElementById('txt-lang').innerText = T[l].lang;
+        document.getElementById('txt-diet').innerText = T[l].diet;
+        document.getElementById('txt-batch').innerText = T[l].batch;
+        document.getElementById('txt-gen-btn').innerText = T[l].genBtn;
+        document.getElementById('txt-head').innerText = T[l].head;
+        document.getElementById('txt-add-btn').innerText = T[l].addBtn;
+        document.getElementById('txt-spin-all').innerText = T[l].spinAll;
+        document.querySelectorAll('.btn-girar').forEach(b => b.innerText = T[l].girar);
+        document.querySelectorAll('.label-atk').forEach(b => b.innerText = T[l].atk);
+        document.querySelectorAll('.label-def').forEach(b => b.innerText = T[l].def);
+        document.querySelectorAll('.label-ene').forEach(b => b.innerText = T[l].ene);
+    }
+
+    function addCard() {
+        cardCount++;
+        const container = document.getElementById('wrapper-list');
+        const id = cardCount;
+        const html = `
+            <div class="dino-card" id="card-${id}">
+                <button class="btn-r" onclick="document.getElementById('card-${id}').remove()">${T[currentLang].remover}</button>
+                <div style="font-size:0.7rem; color:#555">#${id}</div>
+                <div class="display-result" id="res-d-${id}">---</div>
+                <div class="grid-stats">
+                    <div class="box-stat"><span class="label-stat label-atk">${T[currentLang].atk}</span><span class="val-stat" id="stat-a-${id}">--</span></div>
+                    <div class="box-stat"><span class="label-stat label-def">${T[currentLang].def}</span><span class="val-stat" id="stat-d-${id}">--</span></div>
+                    <div class="box-stat"><span class="label-stat label-ene">${T[currentLang].ene}</span><span class="val-stat" id="stat-e-${id}">--</span></div>
+                </div>
+                <button class="btn btn-p btn-girar" onclick="spinOne(${id})">${T[currentLang].girar}</button>
+            </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function batchAdd() {
+        const qty = document.getElementById('batch-qty').value;
+        for(let i=0; i<qty; i++) addCard();
+        toggleMenu();
+    }
+
+    function spinOne(id) {
+        const diet = document.getElementById('diet-select').value;
+        let pool = [];
+        if(diet === 'all') pool = [...DINOS.car, ...DINOS.her, ...DINOS.pis, ...DINOS.oni];
+        else pool = DINOS[diet];
+
+        // Spin Dino
+        const txt = document.getElementById(`res-d-${id}`);
+        let c = 0;
+        const itv = setInterval(() => {
+            txt.innerText = pool[Math.floor(Math.random()*pool.length)];
+            if(c++ > 12) { clearInterval(itv); txt.innerText = "⭐ " + txt.innerText; }
         }, 50);
 
-        const stats = [`atk-${id}`, `def-${id}`, `ene-${id}`];
-        let has100 = false;
-        let has0 = false;
+        // Spin Stats Ultra-Variado
+        const stats = [`stat-a-${id}`, `stat-d-${id}`, `stat-e-${id}`];
+        let has100 = false, has0 = false;
+        
+        stats.forEach(sid => {
+            let options = [...CHANCES];
+            // Raridade de repetição
+            if(has100 && Math.random() > 0.05) options = options.filter(v => v !== "100%");
+            if(has0 && Math.random() > 0.05) options = options.filter(v => v !== "0%");
+            
+            const final = options[Math.floor(Math.random()*options.length)];
+            if(final === "100%") has100 = true;
+            if(final === "0%") has0 = true;
 
-        stats.forEach((sid) => {
-            let final = CHANCE_POOL[Math.floor(Math.random() * 5)];
-            if(final === "100%") {
-                if(has100 && Math.random() > 0.05) final = "75%";
-                else has100 = true;
-            }
-            if(final === "0%") {
-                if(has0 && Math.random() > 0.05) final = "25%";
-                else has0 = true;
-            }
-
-            let scount = 0;
-            const timerStat = setInterval(() => {
-                document.getElementById(sid).innerText = CHANCE_POOL[Math.floor(Math.random() * 5)];
-                if(scount++ > 10) {
-                    clearInterval(timerStat);
-                    document.getElementById(sid).innerText = final;
-                }
+            let sc = 0;
+            const sitv = setInterval(() => {
+                document.getElementById(sid).innerText = CHANCES[Math.floor(Math.random()*5)];
+                if(sc++ > 10) { clearInterval(sitv); document.getElementById(sid).innerText = final; }
             }, 70);
         });
     }
 
-    // Começa com a primeira criatura
-    window.onload = addDinoBox;
+    function spinAll() {
+        const cards = document.querySelectorAll('.dino-card');
+        cards.forEach(c => {
+            const id = c.id.split('-')[1];
+            spinOne(id);
+        });
+    }
+
+    window.onload = () => addCard();
 </script>
 </body>
 </html>
