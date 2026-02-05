@@ -3,29 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dino Hub - MultiLang</title>
+    <title>Spin Dinosaur - Genera</title>
     <style>
-        :root { --primary: #1b5e20; --dark: #0a0a0a; --card: #1a1a1a; --accent: #ffca28; --text: #f0f0f0; }
+        :root { --primary: #1b5e20; --dark: #0a0a0a; --card: #1a1a1a; --accent: #ffca28; --text: #f0f0f0; --danger: #c62828; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* Header com Seletor de Idioma */
         header { 
-            background: var(--primary); 
-            width: 100%; 
-            padding: 10px 0; 
-            text-align: center; 
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6); 
-            border-bottom: 2px solid var(--accent); 
+            background: var(--primary); width: 100%; padding: 10px 0; text-align: center; 
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-bottom: 2px solid var(--accent); 
         }
-        .lang-btn { background: #00000044; color: white; border: 1px solid white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; }
+        .lang-btn { background: #00000044; color: white; border: 1px solid white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; }
 
         .container { width: 92%; max-width: 450px; margin-top: 15px; flex: 1; }
-        .card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; text-align: center; }
+        .card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; text-align: center; position: relative; }
+        
         .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); margin-top: 15px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; width: auto; margin: 0; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 5px; text-decoration: none;}
+        
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
+        
         .result { font-size: 1.7rem; color: var(--accent); margin: 10px 0; font-weight: bold; text-transform: uppercase; }
         .hidden { display: none; }
         
@@ -33,30 +30,30 @@
         .status-label { font-weight: bold; font-size: 0.9rem; color: #bbb; }
         .status-value { color: var(--accent); font-size: 1.2rem; font-weight: 800; }
 
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; margin-top: 10px; }
+
         footer { margin-top: 30px; padding: 20px; text-align: center; font-size: 0.85rem; color: #888; border-top: 1px solid #222; width: 100%; background: #0f0f0f; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="width: 60px"></div> <span id="txt-title">DINO HUB - JP3</span>
+    <div style="width: 60px"></div> 
+    <span id="txt-title">SPIN DINOSAUR - GENERA</span>
     <button class="lang-btn" onclick="toggleLang()" id="btn-lang">EN / PT</button>
 </header>
 
-<div id="menu" class="container">
-    <h3 id="txt-choose">Escolher Jogo</h3>
-    <div id="game-list"></div>
-    <button class="btn btn-outline" onclick="showView('add-game')" id="txt-new-game">+ Novo Jogo</button>
-</div>
+<div class="container">
+    <div class="nav-bar">
+        <button class="btn-sm" onclick="resetApp()" id="txt-back">← Reiniciar</button>
+        <button class="btn-sm" onclick="showAddModal()" id="txt-new-dino">+ Novo</button>
+    </div>
 
-<div id="game-screen" class="container hidden">
-    <a href="#" class="btn-outline" style="text-decoration:none; padding:5px 10px; border-radius:5px" onclick="showView('menu')" id="txt-back">← Voltar</a>
-    <h2 id="current-game-title" style="text-align: center; margin-top: 20px;">Jurassic Park III</h2>
-    
     <div class="card">
         <h3 id="txt-creature">🦖 Criatura</h3>
         <div class="result" id="res-dino">...</div>
-        <button class="btn" onclick="spinDino()" id="txt-spin-dino">GIRAR</button>
+        <button class="btn" onclick="spinDino()" id="txt-spin-dino">GIRAR DINOSSAURO</button>
+        <button class="btn-delete" onclick="removeCurrentDino()" id="txt-delete">Excluir este Dinossauro</button>
     </div>
 
     <div class="card">
@@ -68,10 +65,11 @@
     </div>
 </div>
 
-<div id="add-game" class="container hidden">
-    <h3 id="txt-add-title">Novo Jogo</h3>
-    <input type="text" id="new-game-name" placeholder="..." style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:none; background:#222; color:white;">
-    <button class="btn" onclick="createNewGame()" id="txt-create">Criar</button>
+<div id="modal-add" class="container hidden" style="position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background: #1a1a1a; padding: 20px; border: 2px solid var(--accent); border-radius: 15px; z-index: 100;">
+    <h3 id="txt-add-title">Novo Dinossauro</h3>
+    <input type="text" id="new-dino-name" placeholder="Nome do Dino..." style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:none; background:#333; color:white;">
+    <button class="btn" onclick="addNewDino()" id="txt-create">Adicionar</button>
+    <button class="btn-sm" style="width:100%; margin-top:10px;" onclick="hideAddModal()">Cancelar</button>
 </div>
 
 <footer>
@@ -81,32 +79,33 @@
 
 <script>
     const chances = ["0%", "25%", "50%", "75%", "100%"];
-    const dinos = ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus", "Stegosaurus", "Triceratops", "Ceratosaurus"];
-    
+    let dinos = JSON.parse(localStorage.getItem('myDinos')) || ["Spinosaurus", "T-Rex", "Velociraptor", "Pteranodon", "Ankylosaurus"];
+    let currentDinoIndex = -1;
+
     let currentLang = localStorage.getItem('lang') || 'pt';
     const translations = {
         pt: {
-            title: "DINO HUB - JP3", choose: "Escolher Jogo", newGame: "+ Novo Jogo", back: "← Voltar", 
-            creature: "🦖 Criatura", spinDino: "GIRAR DINOSSAURO", stats: "⚡ Status JP3",
-            atk: "⚔️ ATAQUE", def: "🛡️ DEFESA", en: "🔋 ENERGIA", spinBuffs: "GERAR STATUS",
-            addTitle: "Novo Jogo", create: "Criar Jogo"
+            title: "SPIN DINOSAUR - GENERA", back: "← Reiniciar", newDino: "+ Novo",
+            creature: "🦖 Criatura", spinDino: "GIRAR DINOSSAURO", delete: "Excluir este Dinossauro",
+            stats: "⚡ Status JP3", atk: "⚔️ ATAQUE", def: "🛡️ DEFESA", en: "🔋 ENERGIA",
+            spinBuffs: "GERAR STATUS", addTitle: "Novo Dinossauro", create: "Adicionar"
         },
         en: {
-            title: "DINO HUB - JP3", choose: "Select Game", newGame: "+ New Game", back: "← Back", 
-            creature: "🦖 Creature", spinDino: "SPIN DINOSAUR", stats: "⚡ JP3 Status",
-            atk: "⚔️ ATTACK", def: "🛡️ DEFENSE", en: "🔋 ENERGY", spinBuffs: "GENERATE STATUS",
-            addTitle: "New Game", create: "Create Game"
+            title: "SPIN DINOSAUR - GENERA", back: "← Reset", newDino: "+ New",
+            creature: "🦖 Creature", spinDino: "SPIN DINOSAUR", delete: "Delete this Dino",
+            stats: "⚡ JP3 Status", atk: "⚔️ ATTACK", def: "🛡️ DEFENSE", en: "🔋 ENERGY",
+            spinBuffs: "GENERATE STATUS", addTitle: "New Dinosaur", create: "Add"
         }
     };
 
     function updateTexts() {
         const t = translations[currentLang];
         document.getElementById('txt-title').innerText = t.title;
-        document.getElementById('txt-choose').innerText = t.choose;
-        document.getElementById('txt-new-game').innerText = t.newGame;
         document.getElementById('txt-back').innerText = t.back;
+        document.getElementById('txt-new-dino').innerText = t.newDino;
         document.getElementById('txt-creature').innerText = t.creature;
         document.getElementById('txt-spin-dino').innerText = t.spinDino;
+        document.getElementById('txt-delete').innerText = t.delete;
         document.getElementById('txt-stats').innerText = t.stats;
         document.getElementById('lbl-atk').innerText = t.atk;
         document.getElementById('lbl-def').innerText = t.def;
@@ -122,28 +121,19 @@
         updateTexts();
     }
 
-    // Funções de Jogo
-    let games = JSON.parse(localStorage.getItem('dinoGames')) || { "Jurassic Park 3": {} };
-    function showView(viewId) {
-        document.querySelectorAll('.container').forEach(v => v.classList.add('hidden'));
-        document.getElementById(viewId).classList.remove('hidden');
-        if(viewId === 'menu') renderGameList();
-    }
-    function renderGameList() {
-        const list = document.getElementById('game-list'); list.innerHTML = "";
-        Object.keys(games).forEach(g => {
-            const b = document.createElement('button'); b.className = "btn"; b.innerText = g;
-            b.onclick = () => { document.getElementById('current-game-title').innerText = g; showView('game-screen'); };
-            list.appendChild(b);
-        });
-    }
     function spinDino() {
+        if(dinos.length === 0) return alert("Adicione dinossauros primeiro!");
         const res = document.getElementById('res-dino');
         let c = 0; const t = setInterval(() => {
-            res.innerText = dinos[Math.floor(Math.random()*dinos.length)];
-            if(c++ > 10) { clearInterval(t); res.innerText = "⭐ " + res.innerText + " ⭐"; }
-        }, 70);
+            currentDinoIndex = Math.floor(Math.random()*dinos.length);
+            res.innerText = dinos[currentDinoIndex];
+            if(c++ > 12) { 
+                clearInterval(t); 
+                res.innerText = "⭐ " + dinos[currentDinoIndex] + " ⭐"; 
+            }
+        }, 60);
     }
+
     function spinAllBuffs() {
         ['val-ataque', 'val-defesa', 'val-energia'].forEach(id => {
             let c = 0; const t = setInterval(() => {
@@ -152,13 +142,39 @@
             }, 80);
         });
     }
-    function createNewGame() {
-        const n = document.getElementById('new-game-name').value;
-        if(n) { games[n] = {}; localStorage.setItem('dinoGames', JSON.stringify(games)); showView('menu'); }
+
+    function showAddModal() { document.getElementById('modal-add').classList.remove('hidden'); }
+    function hideAddModal() { document.getElementById('modal-add').classList.add('hidden'); }
+
+    function addNewDino() {
+        const name = document.getElementById('new-dino-name').value;
+        if(name) {
+            dinos.push(name);
+            localStorage.setItem('myDinos', JSON.stringify(dinos));
+            document.getElementById('new-dino-name').value = "";
+            hideAddModal();
+            alert("Adicionado!");
+        }
+    }
+
+    function removeCurrentDino() {
+        if(currentDinoIndex > -1) {
+            dinos.splice(currentDinoIndex, 1);
+            localStorage.setItem('myDinos', JSON.stringify(dinos));
+            document.getElementById('res-dino').innerText = "...";
+            currentDinoIndex = -1;
+            alert("Excluído!");
+        }
+    }
+
+    function resetApp() {
+        if(confirm("Deseja resetar para os dinos padrões?")) {
+            localStorage.removeItem('myDinos');
+            location.reload();
+        }
     }
 
     updateTexts();
-    renderGameList();
 </script>
 </body>
 </html>
