@@ -1,1 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dino Genera - JW Evolution 2</title>
+    <style>
+        :root { 
+            /* Paleta JWE2: Azul Tech, Ciano, Cinza Escuro */
+            --p: #01579b; /* Azul JWE2 */
+            --d: #081015; /* Fundo Deep Dark */
+            --c: #102027; /* Cartas */
+            --a: #4fc3f7; /* Ciano Acento */
+            --t: #e1f5fe; /* Texto Claro */
+            --r: #d32f2f; /* Vermelho Alerta */
+            --dlc-bg: #002535; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; 
+            background: var(--d); color: var(--t); 
+            margin: 0; padding: 0; overflow-x: hidden; 
+        }
 
+        header { 
+            background: linear-gradient(90deg, #002f6c, var(--p)); 
+            padding: 15px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 2px solid var(--a); position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        
+        .sidebar { 
+            position: fixed; left: -320px; top: 0; width: 280px; height: 100%; 
+            background: #0d1b22; z-index: 2000; transition: 0.4s; 
+            padding: 25px; border-right: 1px solid var(--a); 
+            display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box;
+        }
+        .sidebar.open { transform: translateX(320px); }
+        
+        .overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); 
+            display: none; z-index: 1500; backdrop-filter: blur(4px); 
+        }
+
+        /* --- ESTILO DLC FULL SCREEN --- */
+        .dlc-overlay {
+            position: fixed; inset: 0; background: var(--dlc-bg); z-index: 3000;
+            display: none; flex-direction: column; padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .dlc-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--a); padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .dlc-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 15px; overflow-y: auto; flex: 1;
+        }
+        .dlc-card {
+            background: #1c313a; border: 1px solid #455a64; border-radius: 4px;
+            padding: 15px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.2s; text-align: center;
+        }
+        .dlc-card.active { border-color: var(--a); background: #004c8c; box-shadow: 0 0 10px rgba(79, 195, 247, 0.4); }
+        .dlc-card span { font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .status-dot { width: 8px; height: 8px; transform: rotate(45deg); background: #546e7a; }
+        .active .status-dot { background: var(--a); box-shadow: 0 0 5px var(--a); }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Guia e Botões */
+        .guide-section { 
+            background: #15252b; padding: 12px; border-radius: 6px; 
+            margin-bottom: 15px; border: 1px solid #37474f; 
+        }
+        .guide-title { 
+            font-size: 0.7rem; color: var(--a); font-weight: bold; 
+            margin-bottom: 8px; display: block; text-transform: uppercase; 
+        }
+        .legend-item { display: flex; align-items: center; font-size: 0.75rem; margin-bottom: 4px; color: #b0bec5; }
+        .dot { width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; }
+
+        .main-content { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        .controls-box { 
+            background: #102027; padding: 15px; border-radius: 8px; 
+            margin-bottom: 25px; border: 1px solid #37474f; width: 95%; max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .top-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .dino-card { 
+            background: linear-gradient(145deg, #1c2a33, #152026); padding: 20px; border-radius: 6px; 
+            border: 1px solid #37474f; width: 280px; position: relative; 
+            transition: 0.4s; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        
+        /* Cores baseadas em tipos do JWE2 */
+        .card-car { border-top: 4px solid #ef5350 !important; } /* Carnívoro */
+        .card-her { border-top: 4px solid #66bb6a !important; } /* Herbívoro */
+        .card-pis { border-top: 4px solid #42a5f5 !important; } /* Marinho/Aviário */
+        .card-oni { border-top: 4px solid #ffa726 !important; } /* Onívoro */
+
+        .display-result { 
+            font-size: 1.2rem; color: var(--a); margin: 15px 0; 
+            font-weight: 900; text-align: center; text-transform: uppercase; min-height: 40px; 
+            text-shadow: 0 0 5px rgba(79, 195, 247, 0.3);
+        }
+        
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .box-stat { background: #0a151a; padding: 10px 2px; border-radius: 4px; text-align: center; border: 1px solid #263238; }
+        .stat-label { font-size: 0.6rem; color: #90a4ae; display: block; letter-spacing: 1px; }
+        .val-stat { color: #fff; font-weight: bold; font-size: 0.9rem; }
+        .val-neg { color: #ef5350 !important; }
+        .val-pos { color: #69f0ae !important; }
+
+        .btn { border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-p { background: var(--p); color: white; padding: 12px; width: 100%; transition: 0.3s; }
+        .btn-p:hover { background: #0277bd; }
+        .btn-a { background: var(--a); color: #000; padding: 12px; width: 100%; margin-top: 5px; }
+        .btn-clear { background: #b71c1c; color: white; }
+        .btn-spin-all { background: #00838f; color: white; grid-column: span 2; padding: 15px; font-size: 1rem; margin-bottom: 5px; }
+        .btn-add-quick { background: #2e7d32; color: white; grid-column: span 1; padding: 12px; }
+        .btn-r { background: #263238; color: #cfd8dc; padding: 5px 10px; position: absolute; top: 12px; right: 12px; }
+        
+        #wrapper-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
+        
+        .side-item { margin-bottom: 20px; border-bottom: 1px solid #37474f; padding-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: var(--a); font-weight: bold; text-transform: uppercase; }
+        select, input { width: 100%; padding: 12px; background: #0a151a; color: white; border: 1px solid #37474f; border-radius: 4px; box-sizing: border-box; }
+        select:focus, input:focus { border-color: var(--a); outline: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div onclick="toggleMenu()" style="cursor:pointer; font-size:1.5rem;">☰</div>
+    <b id="txt-head">DINO GENERA: EVOLUTION 2</b>
+    <div style="width:30px"></div>
+</header>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="dlc-overlay" id="dlc-screen">
+    <div class="dlc-header">
+        <h2 style="color:var(--a); margin:0;" id="dlc-title-screen">EXPANSION PACKS</h2>
+        <button class="btn" onclick="toggleDLCScreen()" style="background:#263238; color:white; padding:10px 20px;" id="btn-close-dlc">RETORNAR AO PARQUE</button>
+    </div>
+    <div class="dlc-grid" id="dlc-grid-container">
+        </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <h3 id="txt-side-title" style="color:var(--a); margin-top:0;">LABORATÓRIO HAMMOND</h3>
+    
+    <div class="side-item">
+        <label id="lbl-mass">Incubação em Massa (X)</label>
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <input type="number" id="add-qty" value="1" min="1" max="50" style="width:70px;">
+            <select id="diet-filter" style="flex:1;">
+                <option value="all" id="opt-all">Genoma Aleatório</option>
+                <option value="car" id="opt-car">Carnívoros</option>
+                <option value="her" id="opt-her">Herbívoros</option>
+                <option value="pis" id="opt-pis">Laguna / Aviário</option>
+                <option value="oni" id="opt-oni">Onívoros</option>
+            </select>
+        </div>
+        <button class="btn btn-a" onclick="multiAdd()" id="btn-multi-add">+ INCUBAR LOTE</button>
+    </div>
+
+    <div class="side-item">
+        <label id="lbl-dlc">Pacotes de Espécies</label>
+        <button class="btn" style="width:100%; background:#263238; border:1px solid var(--a); color:var(--a); padding:15px;" onclick="toggleDLCScreen()" id="btn-open-dlc">
+            GERENCIAR DLCs
+        </button>
+    </div>
+
+    <div class="side-item">
+        <label id="lbl-settings">Configurações do Parque</label>
+        <select id="epic-mode" style="margin-bottom:10px;">
+            <option value="off" id="opt-normal">Modo Padrão</option>
+            <option value="on" id="opt-epic">Modo Sandbox (Sorte 🍀)</option>
+        </select>
+        <select id="lang-select" onchange="changeLang(this.value)">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+
+    <div class="guide-section">
+        <span class="guide-title" id="txt-guide-title">Categorias de Recinto</span>
+        <div class="legend-item"><div class="dot" style="background:#ef5350"></div> <span id="leg-car">Carnívoro (Cerca Alta)</span></div>
+        <div class="legend-item"><div class="dot" style="background:#66bb6a"></div> <span id="leg-her">Herbívoro (Cerca Média)</span></div>
+        <div class="legend-item"><div class="dot" style="background:#42a5f5"></div> <span id="leg-pis">Laguna / Aviário</span></div>
+        <div class="legend-item"><div class="dot" style="background:#ffa726"></div> <span id="leg-oni">Onívoro (Adaptável)</span></div>
+    </div>
+
+    <button class="btn btn-p" onclick="location.href='index.html'" id="btn-exit" style="background:#004c8c; margin-bottom:10px;">Sair para Menu Principal</button>
+    <button class="btn btn-p" onclick="toggleMenu()" id="btn-close-menu" style="background:#263238;">Fechar Painel</button>
+</div>
+
+<div class="main-content">
+    <div class="controls-box">
+        <div class="top-btns">
+            <button class="btn btn-spin-all" onclick="spinAll()" id="btn-spin-all">SINTETIZAR TODOS</button>
+            <button class="btn btn-add-quick" onclick="addCard()" id="btn-add-main">+ NOVO GENOMA</button>
+            <button class="btn btn-clear" onclick="clearAll()" id="btn-del-all">LIMPAR LAB</button>
+        </div>
+    </div>
+    <div id="wrapper-list"></div>
+</div>
+
+<script>
+    // LISTA PRINCIPAL - Baseada em JWE2 (Removidos exclusivos do filme Dominion)
+    const DINOS = {
+        car: ["T-Rex", "Ceratosaurus", "Metriacanthosaurus", "Majungasaurus", "Allosaurus", "Carnotaurus", "Albertosaurus", "Acrocanthosaurus", "Giganotosaurus", "Troodon", "Dilophosaurus", "Cryolophosaurus", "Qianzhousaurus"],
+        her: ["Triceratops", "Brachiosaurus", "Struthiomimus", "Nasutoceratops", "Amargasaurus", "Dryosaurus", "Gallimimus", "Parasaurolophus", "Stegosaurus", "Apatosaurus", "Mamenchisaurus", "Nigersaurus", "Olorotitan"],
+        pis: ["Mosasaurus", "Tylosaurus", "Plesiosaurus", "Ichthyosaurus", "Liopleurodon", "Pteranodon", "Dimorphodon", "Tapejara", "Geosternbergia", "Tropeognathus", "Cearadactylus", "Baryonyx", "Suchomimus"],
+        oni: ["Deinocheirus", "Gigantoraptor", "Oviraptor"] // Ajustado para coisas que podem comer carne/plantas ou ovos no contexto geral
+    };
+
+    // LISTA DLC - Packs do JWE2 (Early Cretaceous, Camp Cretaceous, etc)
+    const DLC_DATA = [
+        { name: "Scorpios Rex", type: "car" },     // Camp Cretaceous
+        { name: "Monolophosaurus", type: "car" },  // Camp Cretaceous
+        { name: "Wuerhosaurus", type: "her" },     // Feathered Pack
+        { name: "Minmi", type: "her" },            // Early Cretaceous
+        { name: "Kronosaurus", type: "pis" },      // Early Cretaceous (Marine)
+        { name: "Dsungaripterus", type: "pis" },   // Early Cretaceous (Flying)
+        { name: "Attenborosaurus", type: "pis" },  // Deluxe
+        { name: "Megaraptor", type: "car" }        // Deluxe
+    ];
+
+    // Inicializa DLC no pool principal
+    DLC_DATA.forEach(dino => {
+        if(!DINOS[dino.type].includes(dino.name)) {
+            DINOS[dino.type].push(dino.name);
+        }
+    });
+
+    // Atributos baseados em JWE2 (Appeal, Dominance, Comfort)
+    const CHANCES_NORMAL = ["E", "D", "C", "B", "A", "S"];
+    const CHANCES_EPIC = ["B", "A", "S", "SS", "SSS"];
+    
+    let currentLang = 'pt';
+    let cardCount = 0;
+
+    const TRANSLATIONS = {
+        pt: {
+            head: "DINO GENERA: EVOLUTION 2",
+            sideTitle: "LABORATÓRIO HAMMOND",
+            lblMass: "Incubação em Massa (X)",
+            optAll: "Genoma Aleatório", optCar: "Carnívoros", optHer: "Herbívoros", optPis: "Laguna / Aviário", optOni: "Onívoros",
+            btnMulti: "+ INCUBAR LOTE",
+            lblSettings: "Configurações do Parque",
+            lblDLC: "Pacotes de Espécies",
+            btnOpenDLC: "GERENCIAR DLCs",
+            dlcTitleScreen: "EXPANSION PACKS",
+            btnCloseDLC: "RETORNAR AO PARQUE",
+            optNormal: "Modo Padrão", optEpic: "Modo Sandbox (Sorte 🍀)",
+            guideTitle: "Categorias de Recinto",
+            legCar: "Carnívoro (Cerca Alta)", legHer: "Herbívoro (Cerca Média)", legPis: "Laguna / Aviário", legOni: "Onívoro",
+            btnExit: "Menu Principal", btnClose: "Fechar Painel",
+            btnSpinAll: "SINTETIZAR TODOS",
+            btnAddMain: "+ NOVO GENOMA",
+            btnDelAll: "LIMPAR LAB",
+            waiting: "EXTRAINDO DNA...",
+            spin: "SINTETIZAR",
+            stats: ["APL", "DOM", "CNF"] // Appeal, Dominance, Comfort
+        },
+        en: {
+            head: "DINO GENERA: EVOLUTION 2",
+            sideTitle: "HAMMOND LABS",
+            lblMass: "Mass Incubation (X)",
+            optAll: "Random Genome", optCar: "Carnivores", optHer: "Herbivores", optPis: "Lagoon / Aviary", optOni: "Omnivores",
+            btnMulti: "+ BATCH INCUBATE",
+            lblSettings: "Park Settings",
+            lblDLC: "Species Packs",
+            btnOpenDLC: "MANAGE DLCs",
+            dlcTitleScreen: "EXPANSION PACKS",
+            btnCloseDLC: "RETURN TO PARK",
+            optNormal: "Standard Mode", optEpic: "Sandbox Mode (Luck 🍀)",
+            guideTitle: "Enclosure Categories",
+            legCar: "Carnivore (High Fence)", legHer: "Herbivore (Med Fence)", legPis: "Lagoon / Aviary", legOni: "Omnivore",
+            btnExit: "Main Menu", btnClose: "Close Panel",
+            btnSpinAll: "SYNTHESIZE ALL",
+            btnAddMain: "+ NEW GENOME",
+            btnDelAll: "CLEAR LAB",
+            waiting: "EXTRACTING DNA...",
+            spin: "SYNTHESIZE",
+            stats: ["APP", "DOM", "CMF"] // Appeal, Dominance, Comfort
+        }
+    };
+
+    // --- FUNÇÕES DE SISTEMA ---
+
+    function initDLCScreen() {
+        const container = document.getElementById('dlc-grid-container');
+        container.innerHTML = '';
+        
+        DLC_DATA.forEach((dino, index) => {
+            const card = document.createElement('div');
+            card.className = 'dlc-card active'; 
+            card.id = `dlc-btn-${index}`;
+            card.onclick = () => toggleDLCLogic(index, dino.type, dino.name);
+            
+            card.innerHTML = `
+                <span>${dino.name}</span>
+                <div class="status-dot"></div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function toggleDLCLogic(index, type, name) {
+        const el = document.getElementById(`dlc-btn-${index}`);
+        const isActive = el.classList.toggle('active');
+
+        if (isActive) {
+            if (!DINOS[type].includes(name)) DINOS[type].push(name);
+        } else {
+            DINOS[type] = DINOS[type].filter(d => d !== name);
+        }
+    }
+
+    function toggleDLCScreen() {
+        const s = document.getElementById('dlc-screen');
+        s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function changeLang(l) {
+        currentLang = l;
+        const t = TRANSLATIONS[l];
+        
+        const map = {
+            'txt-head': t.head, 'txt-side-title': t.sideTitle, 'lbl-mass': t.lblMass,
+            'opt-all': t.optAll, 'opt-car': t.optCar, 'opt-her': t.optHer,
+            'opt-pis': t.optPis, 'opt-oni': t.optOni, 'btn-multi-add': t.btnMulti,
+            'lbl-settings': t.lblSettings, 'lbl-dlc': t.lblDLC, 'btn-open-dlc': t.btnOpenDLC,
+            'dlc-title-screen': t.dlcTitleScreen, 'btn-close-dlc': t.btnCloseDLC,
+            'opt-normal': t.optNormal, 'opt-epic': t.optEpic, 'txt-guide-title': t.guideTitle,
+            'leg-car': t.legCar, 'leg-her': t.legHer, 'leg-pis': t.legPis, 'leg-oni': t.legOni,
+            'btn-exit': t.btnExit, 'btn-close-menu': t.btnClose,
+            'btn-spin-all': t.btnSpinAll, 'btn-add-main': t.btnAddMain, 'btn-del-all': t.btnDelAll
+        };
+
+        for (const [id, text] of Object.entries(map)) {
+            const el = document.getElementById(id);
+            if(el) el.innerText = text;
+        }
+
+        document.querySelectorAll('.display-result').forEach(el => {
+            if(el.innerText.includes("EXTRACTING") || el.innerText.includes("EXTRAINDO")) el.innerText = t.waiting;
+        });
+        document.querySelectorAll('.btn-spin-card').forEach(el => el.innerText = t.spin);
+        
+        // Update Stats Labels dynamically
+        document.querySelectorAll('.stat-lbl-1').forEach(el => el.innerText = t.stats[0]);
+        document.querySelectorAll('.stat-lbl-2').forEach(el => el.innerText = t.stats[1]);
+        document.querySelectorAll('.stat-lbl-3').forEach(el => el.innerText = t.stats[2]);
+    }
+
+    function multiAdd() {
+        const qty = parseInt(document.getElementById('add-qty').value) || 1;
+        const diet = document.getElementById('diet-filter').value;
+        for(let i=0; i<qty; i++) { addCard(diet); }
+        toggleMenu();
+    }
+
+    function addCard(forcedDiet = 'all') {
+        if(forcedDiet === 'all') forcedDiet = document.getElementById('diet-filter').value;
+        cardCount++;
+        const t = TRANSLATIONS[currentLang];
+        
+        const html = `
+            <div class="dino-card" id="card-${cardCount}" data-diet="${forcedDiet}">
+                <button class="btn btn-r" onclick="document.getElementById('card-${cardCount}').remove()">✕</button>
+                <div class="display-result" id="res-${cardCount}">${t.waiting}</div>
+                <div class="grid-stats">
+                    <div class="box-stat"><span class="stat-label stat-lbl-1">${t.stats[0]}</span><span class="val-stat" id="atk-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label stat-lbl-2">${t.stats[1]}</span><span class="val-stat" id="def-${cardCount}">--</span></div>
+                    <div class="box-stat"><span class="stat-label stat-lbl-3">${t.stats[2]}</span><span class="val-stat" id="ene-${cardCount}">--</span></div>
+                </div>
+                <button class="btn btn-p btn-spin-card" onclick="spin(${cardCount})">${t.spin}</button>
+            </div>`;
+        document.getElementById('wrapper-list').insertAdjacentHTML('beforeend', html);
+    }
+
+    function spin(id) {
+        const cardEl = document.getElementById(`card-${id}`);
+        const dietType = cardEl.getAttribute('data-diet');
+        const isEpic = document.getElementById('epic-mode').value === 'on';
+        
+        let pool = (dietType === 'all') ? [].concat(...Object.values(DINOS)) : DINOS[dietType];
+        
+        if (pool.length === 0) {
+            document.getElementById(`res-${id}`).innerText = "EMPTY / VAZIO";
+            return;
+        }
+
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+        let realType = 'car';
+        for(let t in DINOS) if(DINOS[t].includes(chosen)) realType = t;
+
+        cardEl.className = `dino-card card-${realType}`;
+        document.getElementById(`res-${id}`).innerText = chosen;
+
+        const chances = isEpic ? CHANCES_EPIC : CHANCES_NORMAL;
+        ['atk', 'def', 'ene'].forEach(stat => {
+            const val = chances[Math.floor(Math.random() * chances.length)];
+            const el = document.getElementById(`${stat}-${id}`);
+            el.innerText = val;
+            
+            // Logica de cor para rating (S e A verde, E e D vermelho)
+            let colorClass = '';
+            if(['S', 'SS', 'SSS', 'A'].includes(val)) colorClass = 'val-pos';
+            else if(['E', 'D'].includes(val)) colorClass = 'val-neg';
+            
+            el.className = 'val-stat ' + colorClass;
+        });
+    }
+
+    function spinAll() {
+        document.querySelectorAll('.dino-card').forEach(card => spin(card.id.split('-')[1]));
+    }
+
+    function clearAll() { document.getElementById('wrapper-list').innerHTML = ""; }
+    
+    function toggleMenu() {
+        const s = document.getElementById('sidebar');
+        const o = document.getElementById('overlay');
+        s.classList.toggle('open');
+        o.style.display = s.classList.contains('open') ? 'block' : 'none';
+    }
+
+    // Inicialização
+    initDLCScreen();
+    addCard();
+</script>
+</body>
+</html>
